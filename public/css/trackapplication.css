@@ -1,0 +1,186 @@
+/* --- Track Application Styles --- */
+.track-hero {
+background: radial-gradient(circle at top right, #f8faff 0%, #ffffff 100%);
+    min-height: 80vh;
+    display: flex;
+    align-items: flex-start; /* 'center' se 'flex-start' kiya taaki upar se start ho */
+    
+    /* Padding-top ko kam karne se card upar chala jayega */
+    margin-top: 70px !important; 
+    padding-top: 40px !important; /* Pehle 80px ya 120px tha, ab 40px kiya */
+}
+
+
+
+.bg-primary-light {
+    background-color: #eef2ff;
+}
+
+/* Pulse Animation for the Live Icon */
+.pulse-icon {
+    animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Input Group Styling */
+.tracking-input-group {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tracking-input-group .form-control:focus {
+    background-color: #fff !important;
+    box-shadow: none;
+}
+
+.tracking-input-group:focus-within {
+    box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Tracking Button */
+.tracking-btn {
+    box-shadow: 0 10px 20px rgba(26, 35, 126, 0.2);
+    transition: all 0.3s ease;
+}
+
+.tracking-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(26, 35, 126, 0.3);
+}
+
+/* Card Styling */
+.card.rounded-5 {
+    border-radius: 30px !important;
+}
+
+.xsmall {
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+/* Card Footer customization */
+.card-footer strong {
+    color: var(--primary-color);
+}
+
+/* --- Timeline Tracking Styles --- */
+.border-dashed {
+    border: 2px dashed #e0e6ed;
+}
+
+.tracking-timeline-container {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Vertical Line */
+.tracking-timeline-container::before {
+    content: '';
+    position: absolute;
+    left: 43px;
+    top: 0;
+    width: 3px;
+    height: 90%;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 80px;
+    margin-bottom: 40px;
+    z-index: 2;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #adb5bd;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+/* Completed State */
+.timeline-item.completed .timeline-icon {
+    background: #28a745;
+    border-color: #28a745;
+    color: #fff;
+}
+
+.timeline-item.completed::after {
+    content: '';
+    position: absolute;
+    left: 43px;
+    top: 50px;
+    width: 3px;
+    height: 40px;
+    background: #28a745;
+    z-index: 1;
+}
+
+/* Active State */
+.timeline-item.active .timeline-icon {
+    background: #fff;
+    border-color: #ffc107;
+    color: #ffc107;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+    animation: pulse-active 2s infinite;
+}
+
+.timeline-item.active .timeline-content h6 {
+    color: var(--primary-color);
+}
+
+/* Upcoming State */
+.timeline-item.upcoming .timeline-icon {
+    background: #f8f9fa;
+}
+
+@keyframes pulse-active {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.bg-success-light {
+    background: #e8f5e9;
+}
+
+.bg-warning-light {
+    background: #fffde7;
+}

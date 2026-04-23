@@ -1,0 +1,376 @@
+/* BRD EDUCATION PORTAL - PREMIUM STYLES
+   Designed by: AD DIGITAL
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --brd-blue: #003d71;      /* Image se liya gaya Dark Blue */
+    --brd-orange: #ff5e14;    /* Image se liya gaya Orange */
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --transition-speed: 0.4s;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f7fe; /* Light background for portal look */
+    margin: 0;
+    padding: 0;
+}
+
+/* --- NAVBAR SECTION --- */
+.custom-nav {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    border-bottom: 2px solid var(--brd-blue);
+    padding: 8px 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all var(--transition-speed) ease;
+}
+
+/* --- BRANDING (AS PER IMAGE) --- */
+.brand-container {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.brd-text {
+    color: var(--brd-blue);
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.edu-text {
+    color: var(--brd-orange);
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.pvt-ltd {
+    color: var(--brd-blue);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: 2px;
+}
+
+.logo-img {
+    height: 80px;
+    width: 80px;
+    object-fit: contain;
+}
+
+/* --- NAV LINKS & UNDERLINE ANIMATION --- */
+.nav-link {
+    color: #333 !important;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 10px 18px !important;
+    position: relative;
+    transition: var(--transition-speed);
+}
+
+.nav-link i {
+    color: var(--brd-blue); /* Icons style */
+    margin-right: 5px;
+    font-size: 1rem;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    background: var(--brd-orange);
+    bottom: 2px;
+    left: 15%;
+    transition: var(--transition-speed) ease-in-out;
+    border-radius: 10px;
+}
+
+.nav-link:hover {
+    color: var(--brd-orange) !important;
+    transform: translateY(-2px);
+}
+
+.nav-link:hover::after {
+    width: 70%;
+}
+
+/* --- PREMIUM LOGIN BUTTON (Glow Effect) --- */
+.btn-glow-login {
+    background: linear-gradient(45deg, var(--brd-blue), var(--brd-orange));
+    border: none;
+    color: white !important;
+    padding: 10px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 61, 113, 0.3);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-glow-login:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 94, 20, 0.4);
+}
+
+/* --- AUTH MODAL (GLASSMORPHISM) --- */
+.glass-modal {
+    background: rgba(255, 255, 255, 0.9) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    border-radius: 30px !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+.auth-toggle-box {
+    background: #f1f3f9;
+    padding: 6px;
+    border-radius: 50px;
+    display: flex;
+    gap: 5px;
+}
+
+.auth-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px;
+    font-weight: 700;
+    border-radius: 50px;
+    transition: 0.3s;
+    color: var(--brd-blue);
+}
+
+.auth-btn.active {
+    background: var(--brd-orange);
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 94, 20, 0.3);
+}
+
+/* --- STYLISH INPUT FIELDS --- */
+.stylish-input {
+    background: #ffffff !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 15px !important;
+    padding: 12px 20px !important;
+    transition: 0.3s;
+}
+
+.stylish-input:focus {
+    border-color: var(--brd-blue) !important;
+    box-shadow: 0 0 10px rgba(0, 61, 113, 0.1) !important;
+}
+
+.btn-submit-premium {
+    background: var(--brd-blue);
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.btn-submit-premium:hover {
+    background: var(--brd-orange);
+    transform: translateY(-2px);
+}
+
+/* --- MOBILE RESPONSIVENESS --- */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: white;
+        margin-top: 15px;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .nav-link::after {
+        display: none; /* Hide underline on mobile for cleaner look */
+    }
+    
+    .brd-text, .edu-text {
+        font-size: 1.2rem; /* Slightly smaller for mobile */
+    }
+}
+
+/* Jo page active hai uski link ka color change aur niche line */
+.nav-link.active {
+    color: var(--brd-orange) !important; /* Orange color active page ke liye */
+}
+
+/* Active link ke niche permanent line */
+.nav-link.active::after {
+    width: 70% !important; /* Line hamesha dikhegi */
+    background: var(--brd-orange) !important;
+}
+
+/* Hover karne par line thodi aur lambi ho sakti hai (optional) */
+.nav-link.active:hover::after {
+    width: 90% !important;
+}
+
+/* --- BRD EDUCATION PREMIUM FORM STYLES --- */
+
+/* Root Colors from Branding */
+:root {
+    --brd-blue: #003d71;
+    --brd-orange: #ff5e14;
+    --transition-smooth: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Modal Glass Effect */
+.glass-modal {
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(20px);
+    border-radius: 30px !important;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Auth Tabs Container */
+.auth-tabs {
+    background: #f1f4f9;
+    padding: 8px;
+    border-radius: 20px;
+    display: inline-flex;
+    gap: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Tab Buttons */
+.auth-tab {
+    border: none;
+    background: transparent;
+    padding: 12px 35px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--transition-smooth);
+}
+
+.auth-tab.active {
+    background: var(--white, #fff);
+    color: var(--brd-blue);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Form Floating Inputs Styling */
+.form-floating > .stylish-input {
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 18px !important;
+    background: #fff !important;
+    height: 65px !important;
+    padding-top: 1.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-weight: 600;
+    color: #334155;
+    transition: var(--transition-smooth);
+}
+
+.form-floating > label {
+    padding: 1.2rem 1rem !important;
+    color: #94a3b8;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+/* Input Focus Glow & Label Color */
+.stylish-input:focus {
+    border-color: var(--brd-blue) !important;
+    box-shadow: 0 0 0 4px rgba(0, 61, 113, 0.05) !important;
+    background: #fff !important;
+}
+
+.form-floating > .stylish-input:focus ~ label,
+.form-floating > .stylish-input:not(:placeholder-shown) ~ label {
+    color: var(--brd-orange) !important;
+    font-weight: 700 !important;
+    transform: scale(0.85) translateY(-1rem) translateX(0.15rem) !important;
+    opacity: 1;
+}
+
+/* Date Input Special Fix */
+input[type="date"].stylish-input {
+    color: #334155;
+}
+
+/* Luxury Submit Buttons */
+.btn-submit-premium {
+    background: linear-gradient(135deg, var(--brd-blue) 0%, #0056b3 100%);
+    color: #fff !important;
+    border: none;
+    padding: 18px;
+    border-radius: 18px;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    box-shadow: 0 10px 20px rgba(0, 61, 113, 0.2);
+}
+
+/* Shine Animation on Button */
+.btn-submit-premium::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.6s;
+}
+
+.btn-submit-premium:hover::after {
+    left: 100%;
+}
+
+.btn-submit-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0, 61, 113, 0.3);
+}
+
+/* Register Button Special Color */
+.btn-signup-color {
+    background: linear-gradient(135deg, var(--brd-orange) 0%, #e64a19 100%) !important;
+    box-shadow: 0 10px 20px rgba(255, 94, 20, 0.2) !important;
+}
+
+.btn-signup-color:hover {
+    box-shadow: 0 15px 30px rgba(255, 94, 20, 0.3) !important;
+}
+
+/* Tab Transition Animation */
+.tab-pane {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Fix */
+@media (max-width: 576px) {
+    .modal-body {
+        padding: 2rem 1.5rem !important;
+    }
+    .auth-tab {
+        padding: 10px 20px;
+        font-size: 0.8rem;
+    }
+}

@@ -1,0 +1,288 @@
+/* =========================================
+   ADMIT CARD PAGE SPECIFIC STYLES
+   ========================================= */
+
+/* Hero Section Background */
+.admit-hero {
+    background: radial-gradient(circle at top right, #f8faff 0%, #ffffff 100%);
+    min-height: 75vh;
+    display: flex;
+    align-items: center;
+
+    /* Desktop (PC) ke liye adjustments */
+    margin-top: 75px !important;  /* Navbar ke liye space chhodi */
+    padding-top: 50px !important; /* Content ko thoda aur neeche push kiya */
+}
+
+/* Icon Box for Header */
+.icon-box-circle {
+    width: 80px;
+    height: 80px;
+    background: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+}
+
+/* Captcha Styling */
+.ls-3 {
+    letter-spacing: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    background: linear-gradient(45deg, #1a237e, #3949ab);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* =========================================
+   ADMIT CARD DESIGN (VIRTUAL CARD)
+   ========================================= */
+.admit-card-box {
+    background: #fff;
+    border-left: 10px solid #1a237e !important; /* Navy Blue Border */
+    position: relative;
+    z-index: 1;
+}
+
+/* Photo Placeholder */
+.photo-placeholder {
+    border-radius: 10px;
+    background-color: #f9f9f9 !important;
+    border: 2px dashed #cbd5e0 !important;
+}
+
+/* Watermark Text */
+.watermark-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 6rem;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.03); /* Very light grey */
+    z-index: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Table Styling inside Admit Card */
+.admit-card-box table td {
+    font-size: 0.95rem;
+    color: #2d3436;
+}
+
+/* Form text (small info) */
+.xsmall {
+    font-size: 0.75rem;
+}
+
+/* =========================================
+   PRINT STYLES (Most Important)
+   ========================================= */
+@media print {
+    /* Pure page ko hide kar do */
+    body * {
+        visibility: hidden;
+    }
+    
+    /* Sirf Admit Card section ko dikhao */
+    #admit-result-section, 
+    #admit-result-section * {
+        visibility: visible;
+    }
+    
+    /* Admit Card ko top-left position pe set karo */
+    #admit-result-section {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    /* Hide Buttons and Page Footer during print */
+    .btn, 
+    #navbar-placeholder, 
+    #footer-placeholder,
+    .admit-hero {
+        display: none !important;
+    }
+
+    /* Border aur Shadows ko clean rakho print mein */
+    .admit-card-box {
+        box-shadow: none !important;
+        border: 1px solid #eee !important;
+        border-left: 10px solid #1a237e !important;
+    }
+}
+
+/* Animation for generating card */
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#admit-result-section {
+    animation: fadeInSlide 0.6s ease-out;
+}
+
+/* Checklist Styling */
+.check-box {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+.checklist-item {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+.checklist-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.bg-primary {
+    background-color: #1a237e !important;
+}
+
+
+/* I-Card Result Section */
+#admitCardResult {
+    background-color: #f8f9fa;
+    min-height: 400px;
+}
+
+/* Identity Card Main Container */
+#iCardDownload {
+    width: 350px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+}
+
+/* I-Card Header */
+.icard-header {
+    background: linear-gradient(135deg, #00529b 0%, #007bff 100%);
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.icard-header h6 {
+    margin: 0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 14px;
+}
+
+.icard-header small {
+    font-size: 10px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+/* Profile Photo Section */
+.icard-body {
+    padding: 20px;
+}
+
+.icard-photo-wrapper {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#resPhoto {
+    width: 100px;
+    height: 120px;
+    border: 3px solid #f1f4f9;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* Info Labels and Values */
+.icard-info div {
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #333;
+    display: flex;
+}
+
+.icard-info strong {
+    width: 90px;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+.icard-info span {
+    font-weight: 600;
+    color: #000;
+}
+
+/* Highlight Roll Number */
+#resRoll {
+    color: #00529b;
+    font-weight: 700;
+}
+
+/* Footer of I-Card */
+.icard-footer-meta {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #ced4da;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.icard-footer-tag {
+    background: #f8f9fa;
+    padding: 6px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: #888;
+}
+
+/* Signature Box */
+.sign-box {
+    text-align: center;
+}
+
+.sign-box img {
+    width: 70px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.sign-label {
+    font-size: 8px;
+    font-weight: 700;
+    color: #333;
+    margin-top: 2px;
+}
+
+/* Download Button Animation */
+#downloadICard {
+    transition: all 0.3s ease;
+}
+
+#downloadICard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
+}

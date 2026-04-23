@@ -1,0 +1,383 @@
+/* --- Apply Online: Section 1 Styles --- */
+.apply-hero {
+    background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
+    padding-bottom: 80px !important;
+    
+    /* PC par niche lane ke liye ye add karein */
+    margin-top: 80px !important; /* Navbar ki height ke barabar margin */
+    padding-top: 50px !important; /* Content ke beech extra space */
+    display: block !important;
+}
+/* Breadcrumb Styling */
+.breadcrumb-item {
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item a {
+    color: #6c757d;
+    transition: 0.3s;
+}
+
+.breadcrumb-item a:hover {
+    color: #1a237e;
+}
+
+/* Feature Badges */
+.feature-badge {
+    background: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    border: 1px solid #e0e6ed;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+/* Instruction Card */
+.instruction-card {
+    background: #ffffff;
+    border-radius: 24px;
+    position: relative;
+    overflow: hidden;
+}
+
+.bg-warning-light {
+    background-color: #fffde7;
+}
+
+.icon-box-sm {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+/* Checklist Styling */
+.checklist-ui li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.9rem;
+    color: #444;
+    display: flex;
+    align-items: center;
+}
+
+.checklist-ui li:last-child {
+    border-bottom: none;
+}
+
+.checklist-ui li i {
+    margin-right: 12px;
+    font-size: 1.1rem;
+}
+
+/* --- Apply Online: Section 2 Styles --- */
+.filter-section {
+    /* Pehle -45px tha, ise positive 30px ya 40px karein */
+    margin-top: 40px !important; 
+    
+    /* Overlap hatane ke liye padding bhi de sakte hain */
+    padding: 20px 0;
+    
+    /* Z-index ki ab zaroorat nahi agar niche le rahe hain, 
+       par safe rehne ke liye rakh sakte hain */
+    z-index: 10;
+    position: relative;
+}
+
+.search-wrapper {
+    transition: all 0.3s ease;
+}
+
+.border-start-md {
+    border-left: 1px solid #e9ecef;
+}
+
+/* Category Boxes */
+.category-box {
+    background: #ffffff;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 20px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-box:hover {
+    transform: translateY(-5px);
+    border-color: #1a237e;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.category-box.active {
+    background-color: #1a237e;
+    color: #fff;
+    border-color: #1a237e;
+    box-shadow: 0 10px 25px rgba(26, 35, 126, 0.2);
+}
+
+.cat-icon {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+}
+
+.cat-icon i {
+    font-size: 1.8rem;
+}
+
+.cat-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: block;
+}
+
+/* Responsive Fix for Search Bar */
+@media (max-width: 767.98px) {
+    .filter-section {
+        margin-top: -30px;
+    }
+
+    .border-start-md {
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-top: 10px;
+    }
+}
+
+/* --- Apply Online Section 3 Styles --- */
+.bg-primary-light {
+    background: #e8eaf6;
+}
+
+.bg-success-light {
+    background: #e8f5e9;
+}
+
+.bg-danger-light {
+    background: #ffebee;
+}
+
+.bg-info-light {
+    background: #e1f5fe;
+}
+
+.exam-selection-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 24px;
+    transition: all 0.4s ease;
+}
+
+.exam-selection-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+    border-color: var(--primary-color);
+}
+
+.exam-selection-card.urgent {
+    border: 1px solid #ffcdd2;
+    background: linear-gradient(180deg, #fffcfc 0%, #ffffff 100%);
+}
+
+.exam-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+}
+
+.apply-btn {
+    transition: all 0.3s;
+}
+
+.apply-btn:hover {
+    transform: scale(1.02);
+}
+
+.exam-info-list {
+    background: #fcfcfc;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px dashed #eee;
+}
+
+/* --- Section 4: FAQ & Support Styles --- */
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+/* FAQ Accordion Styling */
+.custom-faq .accordion-button {
+    padding: 20px;
+    font-size: 0.95rem;
+    box-shadow: none !important;
+}
+
+.custom-faq .accordion-button:not(.collapsed) {
+    background-color: #f0f3ff;
+    color: var(--primary-color);
+}
+
+/* Support Card Styling */
+.support-card {
+    box-shadow: 0 20px 40px rgba(26, 35, 126, 0.2);
+}
+
+.icon-circle-white {
+    width: 45px;
+    height: 45px;
+    background: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.bg-decoration-circle {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    bottom: -50px;
+    right: -50px;
+    z-index: 1;
+}
+
+.z-index-2 {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-warning.d-block:hover {
+    background-color: #25d366 !important;
+    /* WhatsApp Green */
+    border-color: #25d366 !important;
+    color: #fff !important;
+}
+
+/* --- Section 5 Styles --- */
+.footer-partner-img {
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-partner-img:hover {
+    filter: grayscale(0%);
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+/* Call Button pulse effect */
+.btn-primary.rounded-circle {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% {
+        box-shadow: 0 0 0 0 rgba(26, 35, 126, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(26, 35, 126, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(26, 35, 126, 0);
+    }
+}
+
+/* --- Payment Icons Hover Fix --- */
+.payment-icon-item {
+    transition: all 0.3s ease;
+    text-align: center;
+    opacity: 0.7; /* Default thoda light dikhega */
+}
+
+/* Jab pure item par mouse jaye tab opacity full ho jaye */
+.payment-icon-item:hover {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+/* Har icon ke liye specific color on hover */
+.payment-icon-item:hover .fa-cc-visa { 
+    color: #1a1f71 !important; 
+}
+
+.payment-icon-item:hover .fa-cc-mastercard { 
+    color: #eb001b !important; 
+}
+
+.payment-icon-item:hover .fa-google-pay { 
+    color: #4285f4 !important; 
+}
+
+.payment-icon-item:hover .fa-shield-halved { 
+    color: #00c853 !important; 
+}
+
+/* Optional: Icon ka size thoda bada karne ke liye */
+.payment-icon-item i {
+    font-size: 3rem; /* Aap isse adjust kar sakte hain */
+    display: block;
+    margin-bottom: 5px;
+    color: #6c757d; /* Default Grey color */
+}
+
+
+
+.upload-box-ui {
+    display: block;
+    border: 2px dashed #ddd;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    background: #fcfcfc;
+    font-size: 12px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.upload-box-ui:hover {
+    border-color: #0d6efd;
+    background: #f0f7ff;
+    color: #0d6efd;
+}
+
+.section-title {
+    border-left: 4px solid #ffc107;
+    padding-left: 10px;
+}
+
+/* Solid Primary Button Look */
+.btn-primary {
+    background-color: #0d6efd !important;
+    border: none !important;
+    color: #fff !important;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7 !important; /* Thoda dark shade hover pe */
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}

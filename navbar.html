@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AD Portal | Premium Navbar</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top custom-nav">
+        <div class="container d-flex justify-content-between align-items-center">
+
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="/images/logo.png" alt="Logo"
+                    onerror="this.src='https://via.placeholder.com/40x40/00529b/ffffff?text=B'" class="logo-img me-2">
+                <div class="brand-container">
+                    <span class="brd-text">BRD</span>
+                    <span class="edu-text">EDUCATION</span>
+                    <small class="pvt-ltd">PVT. LTD.</small>
+                </div>
+            </a>
+
+            <button class="btn btn-glow-login d-lg-none ms-auto me-2" data-bs-toggle="modal"
+                data-bs-target="#loginPortal">
+                <i class="fas fa-user-shield"></i>
+            </button>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="applyonline.html"><i class="fas fa-edit me-1"></i>
+                            Apply Online</a></li>
+                    <li class="nav-item"><a class="nav-link" href="trackapplication.html"><i
+                                class="fas fa-map-marker-alt me-1"></i> Track Status</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admitcard.html"><i class="fas fa-id-card me-1"></i>
+                            Admit Card</a></li>
+                </ul>
+                <div class="d-none d-lg-block">
+                    <button class="btn btn-glow-login px-4" data-bs-toggle="modal" data-bs-target="#loginPortal">
+                        <span><i class="fas fa-user-shield me-2"></i>PORTAL LOGIN</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+   <div class="modal fade" id="loginPortal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-modal border-0 shadow-lg" style="border-radius: 20px;">
+            
+            <div class="modal-header border-0 justify-content-center pt-5">
+                <div class="nav nav-pills auth-tabs" id="pills-tab" role="tablist" style="background: #f1f4f9; border-radius: 12px; padding: 5px;">
+                    <button class="nav-link auth-tab active" id="pills-login-tab" data-bs-toggle="pill" data-bs-target="#loginPane" type="button" role="tab" style="border-radius: 10px; font-weight: 600; padding: 10px 30px;">LOGIN</button>
+                    <button class="nav-link auth-tab" id="pills-signup-tab" data-bs-toggle="pill" data-bs-target="#signupPane" type="button" role="tab" style="border-radius: 10px; font-weight: 600; padding: 10px 30px;">REGISTER</button>
+                </div>
+            </div>
+
+            <div class="modal-body p-4 p-md-5">
+                <div class="tab-content" id="pills-tabContent">
+                    
+                    <div class="tab-pane fade show active" id="loginPane" role="tabpanel">
+                        <form>
+                            <div class="form-floating mb-3 mt-2">
+                                <input type="text" class="form-control stylish-input" id="loginName" placeholder="Full Name" required>
+                                <label for="loginName">Full Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="tel" class="form-control stylish-input" id="loginMob" placeholder="Mobile Number" required>
+                                <label for="loginMob">Mobile Number</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="date" class="form-control stylish-input" id="loginDob" required>
+                                <label for="loginDob" style="color: #ff6600; font-weight: bold;">Date of Birth</label>
+                            </div>
+                            <button type="submit" class="btn btn-submit-premium w-100 py-3 shadow-sm" style="background: #00529b; border-radius: 10px; font-weight: 600; letter-spacing: 1px;">
+                                LOG IN TO Portal
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="signupPane" role="tabpanel">
+                        <form>
+                            <div class="form-floating mb-3 mt-2">
+                                <input type="text" class="form-control stylish-input" id="regName" placeholder="Full Name" required>
+                                <label for="regName">Full Name</label>
+                            </div>
+                            
+                            <div class="form-floating mb-3">
+                                <input type="tel" class="form-control stylish-input" id="regMob" placeholder="Mobile Number" required>
+                                <label for="regMob">Mobile Number</label>
+                            </div>
+                            
+                            <div class="form-floating mb-4">
+                                <input type="date" class="form-control stylish-input" id="regDob" required>
+                                <label for="regDob" style="color: #ff6600; font-weight: bold;">Date of Birth</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-submit-premium w-100 py-3 shadow-sm" style="background: #00529b; border-radius: 10px; font-weight: 600; letter-spacing: 1px;">
+                                CREATE PORTAL ACCOUNT
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/script.js"></script>
+</body>
+
+</html>

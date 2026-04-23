@@ -1,0 +1,209 @@
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #636e72;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+    padding-left: 5px;
+}
+
+.social-icon {
+    width: 35px;
+    height: 35px;
+    background: #f0f3ff;
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.social-icon:hover {
+    background: var(--primary-color);
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+.grayscale {
+    filter: grayscale(1);
+    opacity: 0.6;
+    transition: 0.3s;
+}
+
+.grayscale:hover {
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+/* CTA Section Gradient Overlay */
+.bg-primary {
+    background: linear-gradient(45deg, #1a237e 0%, #0d47a1 100%) !important;
+}
+
+.agency-link {
+    transition: 0.3s;
+}
+
+.agency-link:hover {
+    color: #ffc107 !important; /* Brand yellow color on hover */
+    text-decoration: underline !important;
+}
+
+/* Grayscale class ko check karein */
+.grayscale {
+    filter: grayscale(1);
+    opacity: 0.6;
+    transition: 0.3s;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.grayscale:hover {
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+/* Visa icon ke liye special fix */
+.visa-img {
+    width: 45px; /* Width fix kar di */
+    height: auto !important;
+    display: inline-block !important;
+    visibility: visible !important;
+}
+
+/* Mobile Alignment Fix (Jo aapne pehle maanga tha) */
+@media (max-width: 991.98px) {
+    .text-md-end {
+        text-align: center !important;
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+    }
+}
+
+/* =========================================
+   MOBILE CENTER ALIGNMENT (PERFECT FIX)
+   ========================================= */
+
+@media (max-width: 991.98px) {
+    /* 1. Logo aur Content ko center karna */
+    footer .col-lg-4, 
+    footer .col-lg-2, 
+    footer .col-6 {
+        text-align: center !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%; /* Columns ko full width dena taaki center ho sake */
+    }
+
+    /* 2. Brand Logo Center */
+    footer .navbar-brand {
+        justify-content: center;
+        margin-bottom: 15px !important;
+    }
+
+    /* 3. Social Media Icons Middle Fix */
+    footer .social-links {
+        justify-content: center !important;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 25px;
+    }
+
+    /* 4. Contact Us Section Alignment */
+    footer .list-unstyled {
+        padding-left: 0 !important;
+        text-align: center;
+    }
+
+    footer .list-unstyled li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
+
+    /* 5. Managed By Section */
+    footer .mt-3 {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* Quick Links aur Support ko 2-column ki jagah 1-column stack karna better lagta hai */
+    .col-6 {
+        width: 100% !important;
+        margin-bottom: 20px;
+    }
+}
+
+
+/* Footer Logo Specific Styling */
+.footer-logo-brand {
+    gap: 15px; /* Logo aur EXAM PORTAL ke beech space */
+    margin-bottom: 1.5rem;
+    display: inline-flex;
+}
+
+.footer-logo-img {
+    height: 65px; /* PC aur Mobile dono ke liye 65px */
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); /* Halka shadow logo par */
+    transition: transform 0.3s ease;
+}
+
+.footer-logo-brand:hover .footer-logo-img {
+    transform: scale(1.05); /* Hover par halka zoom */
+}
+
+/* Brand Text Styling */
+.footer-brand-text {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* EXAM aur PORTAL ke beech ka gap */
+}
+
+.brand-main {
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: #0F172A; /* Deep Navy color */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.brand-accent {
+    font-weight: 800;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    /* Premium Gold Gradient */
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .footer-logo-img {
+        height: 55px; /* Mobile par thoda chhota lekin saaf */
+    }
+    
+    .brand-main, .brand-accent {
+        font-size: 1.3rem; /* Mobile par font size adjustment */
+    }
+    
+    .footer-brand-text {
+        gap: 8px; /* Mobile par gap thoda kam */
+    }
+}
