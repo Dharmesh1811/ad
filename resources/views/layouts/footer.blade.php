@@ -23,7 +23,13 @@
                 <h6 class="fw-bold mb-3">Quick Links</h6>
                 <ul class="list-unstyled footer-links">
                     <li><a href="#">Active Exams</a></li>
-                    <li><a href="{{ url('/apply-online') }}">Apply Online</a></li>
+                    <li>
+                        @auth
+                            <a href="{{ route('dashboard') }}">Apply Online</a>
+                        @else
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#loginPortal">Apply Online</a>
+                        @endauth
+                    </li>
                     <li><a href="{{ url('/track-status') }}">Track Status</a></li>
                     <li><a href="{{ url('/admit-card') }}">Admit Card</a></li>
                 </ul>

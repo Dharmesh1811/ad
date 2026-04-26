@@ -20,10 +20,19 @@
                     </p>
 
                     <div class="d-flex gap-3 flex-wrap">
-                        <a href="{{ url('/apply-online') }}"
-                            class="btn btn-warning btn-lg fw-bold px-5 py-3 shadow-lg rounded-pill main-btn">
-                            Apply Now <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
+                        @auth
+                            @if ($exams->isNotEmpty())
+                                <a href="{{ route('application.create', $exams->first()) }}"
+                                    class="btn btn-warning btn-lg fw-bold px-5 py-3 shadow-lg rounded-pill main-btn">
+                                    Apply Now <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            @endif
+                        @else
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#loginPortal"
+                                class="btn btn-warning btn-lg fw-bold px-5 py-3 shadow-lg rounded-pill main-btn">
+                                Apply Now <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        @endauth
                         <a href="{{ url('/track-status') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
                             Check Status
                         </a>
@@ -68,106 +77,60 @@
             <div class="row mb-5 align-items-center">
                 <div class="col-md-6">
                     <h2 class="fw-bold text-dark display-6">Active <span class="text-primary">Examinations</span></h2>
-                    <p class="text-muted">General study exam july 2026.</p>
+                    <p class="text-muted">Admin managed exams with live last dates and application control.</p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="#" class="btn btn-outline-dark rounded-pill px-4">View All Exams</a>
+                    <a href="{{ auth()->check() ? route('dashboard') : '#active-exams' }}" class="btn btn-outline-dark rounded-pill px-4">View All Exams</a>
                 </div>
             </div>
 
             <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="premium-card">
-                        <div class="p-card-header d-flex justify-content-between">
-                            <span class="status-indicator active">Active Now</span>
-                            <div class="exam-type">Govt</div>
-                        </div>
+                @forelse ($exams as $exam)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="premium-card {{ $loop->index === 1 ? 'highlighted' : '' }}">
+                            <div class="p-card-header d-flex justify-content-between">
+                                <span class="status-indicator {{ now()->diffInDays($exam->last_date, false) <= 2 ? 'warning' : 'active' }}">
+                                    {{ now()->diffInDays($exam->last_date, false) <= 2 ? 'Closing Soon' : 'Active Now' }}
+                                </span>
+                                <div class="exam-type">{{ $exam->category ?? 'Exam' }}</div>
+                            </div>
 
-                        <div class="p-card-body">
-                            <h3 class="exam-title">SSC CGL 2026</h3>
-                            <p class="exam-desc">Staff Selection Commission - Combined Graduate Level Recruitment.</p>
+                            <div class="p-card-body">
+                                <h3 class="exam-title">{{ $exam->title }}</h3>
+                                <p class="exam-desc">{{ $exam->description }}</p>
 
-                            <div class="exam-details-grid">
-                                <div class="detail-item">
-                                    <span class="label">LAST DATE</span>
-                                    <span class="value text-primary">20 May, 2026</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">VACANCIES</span>
-                                    <span class="value">7,500+</span>
+                                <div class="exam-details-grid">
+                                    <div class="detail-item">
+                                        <span class="label">LAST DATE</span>
+                                        <span class="value {{ now()->diffInDays($exam->last_date, false) <= 2 ? 'text-danger' : 'text-primary' }}">
+                                            {{ $exam->last_date->format('d M, Y') }}
+                                        </span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="label">{{ strtoupper($exam->detail_label ?? 'FEE') }}</span>
+                                        <span class="value">{{ $exam->detail_value ?? 'Rs. ' . number_format((float) $exam->fee, 0) }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="p-card-footer">
-                            <a href="#" class="apply-link" data-bs-toggle="modal" data-bs-target="#sscModal">
-                                Register & Apply <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="premium-card highlighted">
-                        <div class="p-card-header d-flex justify-content-between">
-                            <span class="status-indicator warning">Closing Soon</span>
-                            <div class="exam-type">Entrance</div>
-                        </div>
-
-                        <div class="p-card-body">
-                            <h3 class="exam-title">NEET UG 2026</h3>
-                            <p class="exam-desc">National Eligibility cum Entrance Test for Medical Courses.</p>
-
-                            <div class="exam-details-grid">
-                                <div class="detail-item">
-                                    <span class="label">LAST DATE</span>
-                                    <span class="value text-danger">Tomorrow</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">LEVEL</span>
-                                    <span class="value">All India</span>
-                                </div>
+                            <div class="p-card-footer">
+                                @auth
+                                    <a href="{{ route('application.create', $exam) }}" class="apply-link">
+                                        Register & Apply <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                @else
+                                    <a href="#" class="apply-link" data-bs-toggle="modal" data-bs-target="#loginPortal">
+                                        Register & Apply <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                @endauth
                             </div>
                         </div>
-
-                        <div class="p-card-footer">
-                            <a href="#" class="apply-link" data-bs-toggle="modal" data-bs-target="#neetModal">
-                                Register & Apply <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
                     </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="premium-card">
-                        <div class="p-card-header d-flex justify-content-between">
-                            <span class="status-indicator active">Active Now</span>
-                            <div class="exam-type">Tech</div>
-                        </div>
-
-                        <div class="p-card-body">
-                            <h3 class="exam-title">JEE Mains 2026</h3>
-                            <p class="exam-desc">Joint Entrance Examination for Engineering Admissions.</p>
-
-                            <div class="exam-details-grid">
-                                <div class="detail-item">
-                                    <span class="label">LAST DATE</span>
-                                    <span class="value text-primary">15 June, 2026</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="label">SESSIONS</span>
-                                    <span class="value">02 Sessions</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-card-footer">
-                            <a href="#" class="apply-link" data-bs-toggle="modal" data-bs-target="#jeeModal">
-                                Register & Apply <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-light border rounded-4 text-center">No active exams are available right now.</div>
                     </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>
@@ -303,10 +266,16 @@
                 examinations.</p>
 
             <div class="d-flex justify-content-center gap-3">
-                <button class="btn btn-warning btn-lg px-5 py-3 fw-bold rounded-pill" data-bs-toggle="modal"
-                    data-bs-target="#loginPortal">
-                    Create Account
-                </button>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="btn btn-warning btn-lg px-5 py-3 fw-bold rounded-pill">
+                        Go to Dashboard
+                    </a>
+                @else
+                    <button class="btn btn-warning btn-lg px-5 py-3 fw-bold rounded-pill" data-bs-toggle="modal"
+                        data-bs-target="#loginPortal">
+                        Create Account
+                    </button>
+                @endauth
 
                 <a href="{{ url('/track-status') }}" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill">
                     Track Application
@@ -315,244 +284,4 @@
         </div>
     </section>
 
-    {{-- Modals from index.html --}}
-    <div class="modal fade" id="sscModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold">SSC CGL 2026 - Registration Form</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
-                    <form>
-                        <div class="section-title"><i class="fas fa-user me-2"></i>Personal Details</div>
-                        <div class="row g-3">
-                            <div class="col-md-6"><label class="small fw-bold">Name</label><input type="text"
-                                    class="form-control custom-input" placeholder="Full Name" required></div>
-                            <div class="col-md-3"><label class="small fw-bold">Age</label><input type="number"
-                                    class="form-control custom-input" placeholder="Age"></div>
-                            <div class="col-md-3"><label class="small fw-bold">Sex</label><select
-                                    class="form-select custom-input">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </select></div>
-                            <div class="col-md-6"><label class="small fw-bold">DOB (Date of Birth)</label><input
-                                    type="date" class="form-control custom-input" required></div>
-                            <div class="col-md-6"><label class="small fw-bold">Mobile No</label><input type="tel"
-                                    class="form-control custom-input" placeholder="Phone Number" required></div>
-                            <div class="col-12"><label class="small fw-bold">Full Address</label><textarea
-                                    class="form-control custom-input" rows="2"
-                                    placeholder="Street, City, State, Pincode" required></textarea></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-graduation-cap me-2"></i>Qualification Info
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-md-4"><label class="small fw-bold">Qualification</label><input type="text"
-                                    class="form-control custom-input" placeholder="Min 12th pass" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">Passing Year</label><input type="number"
-                                    class="form-control custom-input" placeholder="YYYY" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">College/University</label><input
-                                    type="text" class="form-control custom-input" placeholder="Institute Name" required>
-                            </div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-upload me-2"></i>Documents Upload</div>
-                        <div class="row g-3">
-                            <div class="col-12 mb-2"><label class="small fw-bold">Aadhar Number</label><input
-                                    type="text" class="form-control custom-input" placeholder="12 Digit Aadhar Number"
-                                    required></div>
-                            <div class="col-md-3 col-6"><input type="file" id="ssc-photo" class="d-none"
-                                    accept="image/*"><label for="ssc-photo" class="upload-box"><i
-                                        class="fas fa-image"></i><span>Photo</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="ssc-sign" class="d-none"
-                                    accept="image/*"><label for="ssc-sign" class="upload-box"><i
-                                        class="fas fa-pen-nib"></i><span>Signature</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="ssc-thumb" class="d-none"
-                                    accept="image/*"><label for="ssc-thumb" class="upload-box"><i
-                                        class="fas fa-fingerprint"></i><span>Thumb</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="ssc-doc" class="d-none"><label
-                                    for="ssc-doc" class="upload-box"><i class="fas fa-file-alt"></i><span>Other
-                                        Doc</span></label></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-map-marker-alt me-2"></i>Exam Centre Preference
-                        </div>
-                        <div class="exam-center-grid">
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="ssc-loc"
-                                    id="sk" checked><label for="sk" class="small mb-0">Kaithal</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="ssc-loc"
-                                    id="sj"><label for="sj" class="small mb-0">Jind</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="ssc-loc"
-                                    id="sh"><label for="sh" class="small mb-0">Hissar</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="ssc-loc"
-                                    id="sa"><label for="sa" class="small mb-0">Ambala</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="ssc-loc"
-                                    id="sr"><label for="sr" class="small mb-0">Rohtak</label></div>
-                        </div>
-                        <button type="submit" class="apply-now-btn mt-4">Final Submit SSC Application</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="neetModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title fw-bold">NEET UG 2026 - Registration Form</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
-                    <form>
-                        <div class="section-title"><i class="fas fa-user me-2"></i>Personal Details</div>
-                        <div class="row g-3">
-                            <div class="col-md-6"><label class="small fw-bold">Name</label><input type="text"
-                                    class="form-control custom-input" placeholder="Full Name" required></div>
-                            <div class="col-md-3"><label class="small fw-bold">Age</label><input type="number"
-                                    class="form-control custom-input" placeholder="Age"></div>
-                            <div class="col-md-3"><label class="small fw-bold">Sex</label><select
-                                    class="form-select custom-input">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                </select></div>
-                            <div class="col-md-6"><label class="small fw-bold">DOB</label><input type="date"
-                                    class="form-control custom-input"></div>
-                            <div class="col-md-6"><label class="small fw-bold">Mobile No</label><input type="tel"
-                                    class="form-control custom-input" placeholder="Phone Number"></div>
-                            <div class="col-12"><label class="small fw-bold">Full Address</label><textarea
-                                    class="form-control custom-input" rows="2" placeholder="Address"></textarea></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-graduation-cap me-2"></i>Education Info</div>
-                        <div class="row g-3">
-                            <div class="col-md-4"><label class="small fw-bold">Qualification</label><input type="text"
-                                    class="form-control custom-input" placeholder="Min 12th pass" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">Passing Year</label><input type="number"
-                                    class="form-control custom-input" placeholder="YYYY" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">School/Institute</label><input
-                                    type="text" class="form-control custom-input" placeholder="Institute Name" required>
-                            </div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-upload me-2"></i>Documents Upload</div>
-                        <div class="row g-3">
-                            <div class="col-12 mb-2"><input type="text" class="form-control custom-input"
-                                    placeholder="Aadhar Number" required></div>
-                            <div class="col-md-3 col-6"><input type="file" id="neet-photo" class="d-none"><label
-                                    for="neet-photo" class="upload-box"><i
-                                        class="fas fa-image"></i><span>Photo</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="neet-sign" class="d-none"><label
-                                    for="neet-sign" class="upload-box"><i
-                                        class="fas fa-pen-nib"></i><span>Signature</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="neet-thumb" class="d-none"><label
-                                    for="neet-thumb" class="upload-box"><i
-                                        class="fas fa-fingerprint"></i><span>Thumb</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="neet-doc" class="d-none"><label
-                                    for="neet-doc" class="upload-box"><i class="fas fa-file-alt"></i><span>Other
-                                        Doc</span></label></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-map-marker-alt me-2"></i>Exam Centre Preference
-                        </div>
-                        <div class="exam-center-grid">
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="neet-loc"
-                                    id="nk" checked><label for="nk" class="small mb-0">Kaithal</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="neet-loc"
-                                    id="nj"><label for="nj" class="small mb-0">Jind</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="neet-loc"
-                                    id="nh"><label for="nh" class="small mb-0">Hissar</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="neet-loc"
-                                    id="na"><label for="na" class="small mb-0">Ambala</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="neet-loc"
-                                    id="nr"><label for="nr" class="small mb-0">Rohtak</label></div>
-                        </div>
-                        <button type="submit" class="apply-now-btn mt-4"
-                            style="background: linear-gradient(45deg, #dc3545, #ff4d5a);">Submit NEET
-                            Application</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="jeeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
-                <div class="modal-header bg-dark text-white">
-                    <h5 class="modal-title fw-bold">JEE Mains 2026 - Registration Form</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-4" style="max-height: 80vh; overflow-y: auto;">
-                    <form>
-                        <div class="section-title"><i class="fas fa-user me-2"></i>Personal Details</div>
-                        <div class="row g-3">
-                            <div class="col-md-6"><label class="small fw-bold">Name</label><input type="text"
-                                    class="form-control custom-input" placeholder="Full Name" required></div>
-                            <div class="col-md-3"><label class="small fw-bold">Age</label><input type="number"
-                                    class="form-control custom-input" placeholder="Age"></div>
-                            <div class="col-md-3"><label class="small fw-bold">Sex</label><select
-                                    class="form-select custom-input">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                </select></div>
-                            <div class="col-md-6"><label class="small fw-bold">DOB</label><input type="date"
-                                    class="form-control custom-input"></div>
-                            <div class="col-md-6"><label class="small fw-bold">Mobile No</label><input type="tel"
-                                    class="form-control custom-input" placeholder="Phone Number"></div>
-                            <div class="col-12"><label class="small fw-bold">Full Address</label><textarea
-                                    class="form-control custom-input" rows="2" placeholder="Address"></textarea></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-graduation-cap me-2"></i>Education Info</div>
-                        <div class="row g-3">
-                            <div class="col-md-4"><label class="small fw-bold">Qualification</label><input type="text"
-                                    class="form-control custom-input" placeholder="Min 12th pass" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">Passing Year</label><input type="number"
-                                    class="form-control custom-input" placeholder="YYYY" required></div>
-                            <div class="col-md-4"><label class="small fw-bold">College/University</label><input
-                                    type="text" class="form-control custom-input" placeholder="Institute Name" required>
-                            </div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-upload me-2"></i>Documents Upload</div>
-                        <div class="row g-3">
-                            <div class="col-12 mb-2"><input type="text" class="form-control custom-input"
-                                    placeholder="Aadhar Number" required></div>
-                            <div class="col-md-3 col-6"><input type="file" id="jee-photo" class="d-none"><label
-                                    for="jee-photo" class="upload-box"><i
-                                        class="fas fa-image"></i><span>Photo</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="jee-sign" class="d-none"><label
-                                    for="jee-sign" class="upload-box"><i
-                                        class="fas fa-pen-nib"></i><span>Signature</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="jee-thumb" class="d-none"><label
-                                    for="jee-thumb" class="upload-box"><i
-                                        class="fas fa-fingerprint"></i><span>Thumb</span></label></div>
-                            <div class="col-md-3 col-6"><input type="file" id="jee-doc" class="d-none"><label
-                                    for="jee-doc" class="upload-box"><i class="fas fa-file-alt"></i><span>Other
-                                        Doc</span></label></div>
-                        </div>
-
-                        <div class="section-title mt-4"><i class="fas fa-map-marker-alt me-2"></i>Exam Centre Preference
-                        </div>
-                        <div class="exam-center-grid">
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="jee-loc"
-                                    id="jk" checked><label for="jk" class="small mb-0">Kaithal</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="jee-loc"
-                                    id="jj"><label for="jj" class="small mb-0">Jind</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="jee-loc"
-                                    id="jh"><label for="jh" class="small mb-0">Hissar</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="jee-loc"
-                                    id="ja"><label for="ja" class="small mb-0">Ambala</label></div>
-                            <div class="center-option"><input class="form-check-input me-2" type="radio" name="jee-loc"
-                                    id="jr"><label for="jr" class="small mb-0">Rohtak</label></div>
-                        </div>
-                        <button type="submit" class="apply-now-btn mt-4 bg-dark">Submit JEE Application</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection

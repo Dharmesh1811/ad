@@ -24,6 +24,29 @@
     @include('layouts.navbar')
 
     <main>
+        <div class="container pt-5 mt-5">
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+                    {{ session('status') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if (session('otp_notice'))
+                <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
+                    {{ session('otp_notice') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+                    Please review the form and fix the highlighted errors.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+        </div>
+
         @yield('content')
     </main>
 
@@ -31,6 +54,24 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    @if (session('openAuthModal'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const modalElement = document.getElementById('loginPortal');
+                if (!modalElement) {
+                    return;
+                }
+
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+
+                const trigger = document.getElementById('pills-{{ session('openAuthModal') }}-tab');
+                if (trigger) {
+                    bootstrap.Tab.getOrCreateInstance(trigger).show();
+                }
+            });
+        </script>
+    @endif
     
     @stack('scripts')
 </body>
