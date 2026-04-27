@@ -42,7 +42,7 @@
                 </li>
                 <li class="nav-item"><a class="nav-link {{ Request::is('track-status') ? 'active' : '' }}" href="{{ url('/track-status') }}"><i
                             class="fas fa-map-marker-alt me-1"></i> Track Status</a></li>
-                <li class="nav-item"><a class="nav-link {{ Request::is('admit-card') ? 'active' : '' }}" href="{{ url('/admit-card') }}"><i class="fas fa-id-card me-1"></i>
+                <li class="nav-item"><a class="nav-link {{ Request::is('download-id-card') ? 'active' : '' }}" href="{{ route('id-card.form') }}"><i class="fas fa-id-card me-1"></i>
                         Admit Card</a></li>
                 @auth
                     <li class="nav-item"><a class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="fas fa-gauge me-1"></i>
@@ -89,72 +89,90 @@
                 <div class="tab-content" id="pills-tabContent">
                     
                     <div class="tab-pane fade show active" id="loginPane" role="tabpanel">
-                        <form method="POST" action="{{ route('auth.request-otp') }}">
+                        <form method="POST" action="{{ route('auth.login-password') }}">
                             @csrf
-                            <input type="hidden" name="mode" value="login">
+                            <input type="hidden" name="auth_tab" value="login">
                             <div class="form-floating mb-3 mt-2">
-                                <input type="tel" class="form-control stylish-input" name="mobile" id="loginMob" placeholder="Mobile Number" value="{{ old('mobile', session('otp_mobile')) }}" required maxlength="10" pattern="[0-9]{10}" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)">
-                                <label for="loginMob">Mobile Number</label>
+                                <input type="text" class="form-control stylish-input @error('mobile_or_email') is-invalid @enderror" name="mobile_or_email" id="loginMob" placeholder="Mobile Number or Email" value="{{ old('mobile_or_email') }}" required>
+                                <label for="loginMob">Mobile Number or Email</label>
+                                @error('mobile_or_email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('otp_login')
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" class="form-control stylish-input @error('password') is-invalid @enderror" name="password" id="loginPassword" placeholder="Password" required>
+                                <label for="loginPassword">Password</label>
+                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted me-2 border-0" onclick="togglePassword('loginPassword', this)">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            @error('password_login')
                                 <div class="text-danger small mb-3">{{ $message }}</div>
                             @enderror
                             <button type="submit" class="btn btn-submit-premium w-100 py-3 shadow-sm" style="background: #00529b; border-radius: 10px; font-weight: 600; letter-spacing: 1px;">
-                                REQUEST OTP
+                                LOGIN
                             </button>
                         </form>
-
-                        @if (session('otp_mobile') || $errors->has('otp'))
-                            <form method="POST" action="{{ route('auth.verify-otp') }}" class="mt-3">
-                                @csrf
-                                <input type="hidden" name="mobile" value="{{ old('mobile', session('otp_mobile')) }}">
-                                <div class="form-floating mb-3">
-                                    <input type="tel" class="form-control stylish-input" value="{{ old('mobile', session('otp_mobile')) }}" disabled maxlength="10" pattern="[0-9]{10}" inputmode="numeric">
-                                    <label>Mobile Number</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <input type="text" class="form-control stylish-input" name="otp" id="otpValue" placeholder="OTP" required autofocus>
-                                    <label for="otpValue">Enter OTP</label>
-                                </div>
-                                @error('otp')
-                                    <div class="text-danger small mb-3">{{ $message }}</div>
-                                @enderror
-                                <button type="submit" class="btn btn-outline-primary w-100 py-3 rounded-3 fw-semibold">
-                                    VERIFY OTP
-                                </button>
-                            </form>
-                        @endif
                     </div>
 
                     <div class="tab-pane fade" id="signupPane" role="tabpanel">
-                        <form method="POST" action="{{ route('auth.request-otp') }}">
+                        <form method="POST" action="{{ route('auth.register-password') }}">
                             @csrf
-                            <input type="hidden" name="mode" value="register">
+                            <input type="hidden" name="auth_tab" value="signup">
                             <div class="form-floating mb-3 mt-2">
-                                <input type="text" class="form-control stylish-input" name="name" id="regName" placeholder="Full Name" value="{{ old('name') }}" required>
+                                <input type="text" class="form-control stylish-input @error('full_name') is-invalid @enderror" name="full_name" id="regName" placeholder="Full Name" value="{{ old('full_name') }}" required>
                                 <label for="regName">Full Name</label>
+                                @error('full_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             
                             <div class="form-floating mb-3">
-                                <input type="tel" class="form-control stylish-input" name="mobile" id="regMob" placeholder="Mobile Number" value="{{ old('mobile') }}" required maxlength="10" pattern="[0-9]{10}" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)">
+                                <input type="tel" class="form-control stylish-input @error('mobile') is-invalid @enderror" name="mobile" id="regMob" placeholder="Mobile Number" value="{{ old('mobile') }}" required maxlength="10" pattern="[0-9]{10}" inputmode="numeric" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,10)">
                                 <label for="regMob">Mobile Number</label>
+                                @error('mobile')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control stylish-input" name="email" id="regEmail" placeholder="Email Address" value="{{ old('email') }}">
+                                <input type="email" class="form-control stylish-input @error('email') is-invalid @enderror" name="email" id="regEmail" placeholder="Email Address" value="{{ old('email') }}" required>
                                 <label for="regEmail">Email Address</label>
+                                @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
                             
-                            <div class="form-floating mb-4">
-                                <input type="date" class="form-control stylish-input" name="date_of_birth" id="regDob" value="{{ old('date_of_birth') }}">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control stylish-input @error('dob') is-invalid @enderror" name="dob" id="regDob" value="{{ old('dob') }}" required>
                                 <label for="regDob" style="color: #ff6600; font-weight: bold;">Date of Birth</label>
+                                @error('dob')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('otp_register')
+                            <div class="form-floating mb-3 position-relative">
+                                <input type="password" class="form-control stylish-input @error('password') is-invalid @enderror" name="password" id="regPassword" placeholder="Password" required>
+                                <label for="regPassword">Password</label>
+                                <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y text-muted me-2 border-0" onclick="togglePassword('regPassword', this)">
+                                    <i class="far fa-eye"></i>
+                                </button>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control stylish-input" name="password_confirmation" id="regPasswordConfirmation" placeholder="Confirm Password" required>
+                                <label for="regPasswordConfirmation">Confirm Password</label>
+                            </div>
+                            @error('password_register')
                                 <div class="text-danger small mb-3">{{ $message }}</div>
                             @enderror
 
                             <button type="submit" class="btn btn-submit-premium w-100 py-3 shadow-sm" style="background: #00529b; border-radius: 10px; font-weight: 600; letter-spacing: 1px;">
-                                CREATE ACCOUNT WITH OTP
+                                CREATE ACCOUNT
                             </button>
                         </form>
 
@@ -165,3 +183,19 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    function togglePassword(id, btn) {
+        const input = document.getElementById(id);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+</script>
+@endpush

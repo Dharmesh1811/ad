@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['mobile' => '9999999999'],
             [
-                'name' => 'Portal Admin',
+                'full_name' => 'Portal Admin',
                 'email' => 'admin@example.com',
                 'password' => Hash::make('admin123'),
                 'is_admin' => true,
@@ -33,10 +33,10 @@ class DatabaseSeeder extends Seeder
         $student = User::updateOrCreate(
             ['mobile' => '8888888888'],
             [
-                'name' => 'Demo Student',
+                'full_name' => 'Demo Student',
                 'email' => 'student@example.com',
                 'password' => Hash::make('student123'),
-                'date_of_birth' => '2004-01-15',
+                'dob' => '2004-01-15',
             ]
         );
 

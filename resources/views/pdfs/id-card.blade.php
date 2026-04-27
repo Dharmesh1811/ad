@@ -15,7 +15,7 @@
             <table class="table table-borderless table-sm mb-0">
                 <tr>
                     <td class="text-muted small py-2">Candidate Name</td>
-                    <td class="fw-bold py-2">{{ $candidate->name }}</td>
+                    <td class="fw-bold py-2">{{ $candidate->full_name }}</td>
                 </tr>
                 <tr>
                     <td class="text-muted small py-2">Application Number</td>

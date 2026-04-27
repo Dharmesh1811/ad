@@ -47,7 +47,7 @@
                                 <div class="d-flex justify-content-between flex-wrap gap-3 mb-4">
                                     <div>
                                         <div class="small text-muted">Candidate</div>
-                                        <h4 class="fw-bold mb-1">{{ $result->name }}</h4>
+                                        <h4 class="fw-bold mb-1">{{ $result->full_name }}</h4>
                                         <div class="text-primary fw-semibold">{{ $result->application_number }}</div>
                                     </div>
                                 </div>

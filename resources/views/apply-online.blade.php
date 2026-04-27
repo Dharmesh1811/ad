@@ -76,8 +76,8 @@
                                     $value = data_get($application->form_data, $field->name);
                                     if (! filled($value)) {
                                         $value = match ($field->name) {
-                                            'full_name' => auth()->user()->name,
-                                            'dob' => optional(auth()->user()->date_of_birth)->format('Y-m-d'),
+                                            'full_name' => auth()->user()->full_name,
+                                            'dob' => optional(auth()->user()->dob)->format('Y-m-d'),
                                             'mobile' => auth()->user()->mobile,
                                             'email' => auth()->user()->email,
                                             default => $value,

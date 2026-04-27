@@ -28,6 +28,7 @@ class AdminController extends Controller
                     $inner->whereHas('user', fn ($userQuery) => $userQuery
                         ->where('application_number', 'like', '%' . $search . '%')
                         ->orWhere('name', 'like', '%' . $search . '%')
+                        ->orWhere('full_name', 'like', '%' . $search . '%')
                         ->orWhere('mobile', 'like', '%' . $search . '%')
                         ->orWhere('email', 'like', '%' . $search . '%'));
                 });
@@ -45,6 +46,30 @@ class AdminController extends Controller
             'statusFilter' => $statusFilter,
             'exams' => Exam::with('formFields')->latest()->get(),
             'fieldTypes' => FormField::FIELD_TYPES,
+        ]);
+    }
+
+    public function users(Request $request): View
+    {
+        $search = $request->string('search')->trim()->toString();
+
+        $users = \App\Models\User::with(['applications.exam', 'payments.exam'])
+            ->where('is_admin', false)
+            ->when($search, function ($query, $search) {
+                $query->where(function ($inner) use ($search) {
+                    $inner->where('full_name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                        ->orWhere('mobile', 'like', '%' . $search . '%')
+                        ->orWhere('application_number', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.users', [
+            'users' => $users,
+            'search' => $search,
         ]);
     }
 

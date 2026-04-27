@@ -150,7 +150,7 @@
                             <i class="fas fa-user-plus"></i>
                         </div>
                         <h5>Registration</h5>
-                        <p class="small text-muted">Mobile Number aur OTP ke saath apna account banayein.</p>
+                        <p class="small text-muted">Mobile Number, email aur password ke saath apna account banayein.</p>
                     </div>
                 </div>
 
@@ -246,9 +246,9 @@
                             <i class="fas fa-lock"></i>
                         </div>
                         <div>
-                            <h5 class="fw-bold">Two-Factor Authentication</h5>
-                            <p class="small text-white-50">Every login and submission is secured with OTP verification
-                                to ensure maximum account safety.</p>
+                            <h5 class="fw-bold">Protected Account Access</h5>
+                            <p class="small text-white-50">Every login and submission is protected with secure
+                                password-based account access to keep your profile safe.</p>
                         </div>
                     </div>
 

@@ -80,10 +80,10 @@ class ApplicationController extends Controller
         }
 
         $request->user()->update(array_filter([
-            'name' => $formData['full_name'] ?? null,
+            'full_name' => $formData['full_name'] ?? null,
             'mobile' => $formData['mobile'] ?? null,
             'email' => $formData['email'] ?? null,
-            'date_of_birth' => $formData['dob'] ?? null,
+            'dob' => $formData['dob'] ?? null,
         ], fn ($value) => filled($value)));
 
         $application->fill([

@@ -354,6 +354,19 @@
     opacity: 1;
 }
 
+.status-closed {
+    background-color: #fcfcfc !important;
+    border-color: #e2e8f0 !important;
+}
+
+.status-closed .exam-title {
+    color: #94a3b8 !important;
+}
+
+.status-closed .exam-desc {
+    color: #cbd5e1 !important;
+}
+
 /* CTA Section Gradient Overlay */
 .bg-primary {
     background: linear-gradient(45deg, #1a237e 0%, #0d47a1 100%) !important;

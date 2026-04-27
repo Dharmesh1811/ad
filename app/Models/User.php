@@ -22,13 +22,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'full_name',
         'email',
         'mobile',
-        'otp',
-        'otp_expires_at',
         'password',
         'application_number',
         'date_of_birth',
+        'dob',
         'is_admin',
     ];
 
@@ -39,7 +39,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'otp',
         'remember_token',
     ];
 
@@ -52,8 +51,8 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
-            'otp_expires_at' => 'datetime',
             'date_of_birth' => 'date',
+            'dob' => 'date',
             'is_admin' => 'boolean',
             'password' => 'hashed',
         ];
@@ -83,5 +82,34 @@ class User extends Authenticatable
     public function latestPayment(): HasOne
     {
         return $this->hasOne(Payment::class)->latestOfMany();
+    }
+
+    public function getNameAttribute(): ?string
+    {
+        return $this->attributes['full_name'] ?? $this->attributes['name'] ?? null;
+    }
+
+    public function setNameAttribute(?string $value): void
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['full_name'] = $value;
+    }
+
+    public function setFullNameAttribute(?string $value): void
+    {
+        $this->attributes['full_name'] = $value;
+        $this->attributes['name'] = $value;
+    }
+
+    public function setDobAttribute($value): void
+    {
+        $this->attributes['dob'] = $value;
+        $this->attributes['date_of_birth'] = $value;
+    }
+
+    public function setDateOfBirthAttribute($value): void
+    {
+        $this->attributes['date_of_birth'] = $value;
+        $this->attributes['dob'] = $value;
     }
 }

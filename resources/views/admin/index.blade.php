@@ -10,7 +10,9 @@
                 <h2 class="fw-bold text-primary mb-1">Admin Panel</h2>
                 <p class="text-muted mb-0">Admin is the form creator, system is the form renderer, user is the form filler.</p>
             </div>
-            <a href="{{ route('admin.export') }}" class="btn btn-outline-dark rounded-pill px-4">Download CSV</a>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.users') }}" class="btn btn-primary rounded-pill px-4">User Master Table</a>
+            </div>
         </div>
 
         <div class="row g-4 mb-4">
@@ -243,120 +245,6 @@
             </div>
         </div>
 
-        <div class="card border-0 shadow-lg rounded-4">
-            <div class="card-body p-4">
-                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
-                    <div>
-                        <h4 class="fw-bold text-primary mb-1">All Applications</h4>
-                        <p class="text-muted mb-0">View dynamic submitted fields and payment status for every exam.</p>
-                    </div>
-                    <form method="GET" action="{{ route('admin.index') }}" class="row g-2">
-                        <div class="col-md">
-                            <input type="text" name="search" class="form-control" placeholder="Application Number / Name / Mobile" value="{{ $search }}">
-                        </div>
-                        <div class="col-md">
-                            <select name="exam" class="form-select">
-                                <option value="">All Exams</option>
-                                @foreach ($exams as $exam)
-                                    <option value="{{ $exam->id }}" @selected($examFilter == $exam->id)>{{ $exam->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md">
-                            <select name="status" class="form-select">
-                                <option value="">All Status</option>
-                                @foreach (['not_filled', 'submitted', 'approved', 'rejected'] as $status)
-                                    <option value="{{ $status }}" @selected($statusFilter === $status)>{{ str_replace('_', ' ', ucfirst($status)) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-auto">
-                            <button class="btn btn-primary">Filter</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="row g-4">
-                    @forelse ($applications as $application)
-                        @php
-                            $payment = $application->user->payments->firstWhere('exam_id', $application->exam_id);
-                            $data = $application->form_data ?? [];
-                        @endphp
-                        <div class="col-12">
-                            <div class="border rounded-4 p-4">
-                                <div class="d-flex justify-content-between flex-wrap gap-3 mb-3">
-                                    <div>
-                                        <h5 class="fw-bold text-primary mb-1">{{ $application->exam?->title }}</h5>
-                                        <div class="small text-muted">Application No: {{ $application->user->application_number }}</div>
-                                        <div class="small text-muted">User: {{ $application->user?->name }}</div>
-                                    </div>
-                                    <div class="text-lg-end">
-                                        <div class="badge bg-light text-dark border text-capitalize px-3 py-2">{{ str_replace('_', ' ', $application->status) }}</div>
-                                        <div class="small text-muted mt-2">Payment: <span class="text-capitalize fw-semibold">{{ $payment?->status ?? 'pending' }}</span></div>
-                                        <div class="small text-muted">Txn: {{ $payment?->transaction_id ?? 'Pending' }}</div>
-                                    </div>
-                                </div>
-
-                                <div class="row g-3 mb-4">
-                                    @foreach ($application->exam?->formFields ?? [] as $field)
-                                        @php $value = $data[$field->name] ?? null; @endphp
-                                        <div class="{{ $field->type === 'textarea' ? 'col-12' : 'col-md-6' }}">
-                                            <div class="bg-light rounded-4 p-3 h-100">
-                                                <div class="small text-muted mb-1">{{ $field->label }}</div>
-                                                @if ($field->type === 'file' && $value)
-                                                    @if (is_array($value))
-                                                        <div class="d-flex flex-wrap gap-2">
-                                                            @foreach ($value as $v)
-                                                                <a href="{{ asset('storage/' . $v) }}" target="_blank">
-                                                                    <img src="{{ asset('storage/' . $v) }}" alt="{{ $field->label }}" class="img-fluid rounded border" style="max-height: 100px;">
-                                                                </a>
-                                                            @endforeach
-                                                        </div>
-                                                    @else
-                                                        <a href="{{ asset('storage/' . $value) }}" target="_blank">
-                                                            <img src="{{ asset('storage/' . $value) }}" alt="{{ $field->label }}" class="img-fluid rounded border" style="max-height: 160px;">
-                                                        </a>
-                                                    @endif
-                                                @else
-                                                    @if (is_array($value))
-                                                        <ul class="mb-0 ps-3">
-                                                            @foreach ($value as $v)
-                                                                <li>{{ $v }}</li>
-                                                            @endforeach
-                                                        </ul>
-                                                    @else
-                                                        <div class="fw-semibold">{{ filled($value) ? $value : 'N/A' }}</div>
-                                                    @endif
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <form method="POST" action="{{ route('admin.applications.update', $application) }}" class="d-flex gap-2 flex-wrap align-items-center">
-                                    @csrf
-                                    @method('PATCH')
-                                    <select name="status" class="form-select" style="max-width: 220px;" required>
-                                        @foreach (['not_filled', 'submitted', 'approved', 'rejected'] as $status)
-                                            <option value="{{ $status }}" @selected($application->status === $status)>{{ str_replace('_', ' ', ucfirst($status)) }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button class="btn btn-dark">Update Status</button>
-                                </form>
-                            </div>
-                        </div>
-                    @empty
-                        <div class="col-12">
-                            <div class="alert alert-light border rounded-4 mb-0">No applications found.</div>
-                        </div>
-                    @endforelse
-                </div>
-
-                <div class="mt-4">
-                    {{ $applications->links() }}
-                </div>
-            </div>
-        </div>
     </div>
 </section>
 @endsection

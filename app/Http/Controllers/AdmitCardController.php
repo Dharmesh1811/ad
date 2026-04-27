@@ -14,38 +14,29 @@ class AdmitCardController extends Controller
         return view('admit-card', ['candidate' => null, 'eligible' => false]);
     }
 
-    public function show(Request $request): Response|View
+    public function show(Request $request): View
     {
-        $validated = $request->validate([
+        $request->validate([
+            'mobile' => 'required|digits:10',
             'application_number' => ['required', 'string'],
+            'captcha' => 'required|captcha',
+        ], [
+            'captcha.captcha' => 'Invalid captcha code. Please try again.',
         ]);
 
-        $candidate = User::where('application_number', strtoupper($validated['application_number']))
+        $candidate = User::where('mobile', $request->mobile)
+            ->where('application_number', strtoupper($request->application_number))
             ->with(['applications.exam', 'payments.exam'])
             ->first();
 
-        $application = $candidate?->applications->firstWhere('status', 'approved')
-            ?? $candidate?->applications->firstWhere('status', 'submitted');
-        $payment = $candidate?->payments->firstWhere('exam_id', $application?->exam_id);
-
-        $eligible = $candidate
-            && $application
-            && $payment?->status === 'paid';
-
-        if (! $candidate || ! $eligible) {
-            return response()->view('admit-card', [
-                'candidate' => $candidate,
-                'application' => $application,
-                'eligible' => false,
-            ]);
+        if (!$candidate) {
+            return view('admit-card', ['candidate' => null, 'eligible' => false])->withErrors(['error' => 'Invalid details. No candidate found with these credentials.']);
         }
 
-        if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.id-card', [
-                'candidate' => $candidate,
-            ]);
+        $application = $candidate->applications()->with('exam')->where('status', 'approved')->first();
 
-            return $pdf->download($candidate->application_number . '-id-card.pdf');
+        if (!$application) {
+            return view('admit-card', ['candidate' => null, 'eligible' => false])->withErrors(['error' => 'Admit card is not available yet. Your application must be approved first.']);
         }
 
         return view('admit-card', [
@@ -53,5 +44,22 @@ class AdmitCardController extends Controller
             'application' => $application,
             'eligible' => true,
         ]);
+    }
+
+    public function download(\App\Models\Application $application)
+    {
+        $candidate = $application->user;
+        
+        if (class_exists(\Barryvdh\DomPDF\Facade\Pdf::class)) {
+            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('idcard.template', [
+                'user' => $candidate,
+                'application' => $application,
+                'exam' => $application->exam,
+            ]);
+
+            return $pdf->download($candidate->application_number . '-id-card.pdf');
+        }
+
+        return back()->withErrors(['error' => 'PDF generation failed. Contact support.']);
     }
 }

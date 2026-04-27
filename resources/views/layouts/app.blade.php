@@ -32,16 +32,14 @@
                 </div>
             @endif
 
-            @if (session('otp_notice'))
-                <div class="alert alert-warning alert-dismissible fade show mt-4" role="alert">
-                    {{ session('otp_notice') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            @endif
-
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
-                    Please review the form and fix the highlighted errors.
+                    <div class="fw-bold mb-1">Please fix the following errors:</div>
+                    <ul class="mb-0 ps-3">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
@@ -54,7 +52,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('js/script.js') }}"></script>
-    @if (session('openAuthModal'))
+    @php
+        $authModalTab = session('openAuthModal', old('auth_tab'));
+    @endphp
+    @if ($authModalTab)
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const modalElement = document.getElementById('loginPortal');
@@ -65,7 +66,7 @@
                 const modal = new bootstrap.Modal(modalElement);
                 modal.show();
 
-                const trigger = document.getElementById('pills-{{ session('openAuthModal') }}-tab');
+                const trigger = document.getElementById('pills-{{ $authModalTab }}-tab');
                 if (trigger) {
                     bootstrap.Tab.getOrCreateInstance(trigger).show();
                 }
