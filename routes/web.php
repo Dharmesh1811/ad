@@ -47,6 +47,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('/exams/{exam}/fields/{field}', [AdminController::class, 'updateField'])->name('fields.update');
     Route::delete('/exams/{exam}/fields/{field}', [AdminController::class, 'destroyField'])->name('fields.destroy');
     Route::patch('/exams/{exam}/toggle', [AdminController::class, 'toggleExam'])->name('exams.toggle');
+    Route::get('/exams/{exam}/builder', [AdminController::class, 'builder'])->name('exams.builder');
     Route::delete('/exams/{exam}', [AdminController::class, 'destroyExam'])->name('exams.destroy');
     Route::get('/export', [AdminController::class, 'export'])->name('export');
 });

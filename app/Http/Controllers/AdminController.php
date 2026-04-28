@@ -46,6 +46,17 @@ class AdminController extends Controller
             'statusFilter' => $statusFilter,
             'exams' => Exam::with('formFields')->latest()->get(),
             'fieldTypes' => FormField::FIELD_TYPES,
+            'totalExams' => Exam::count(),
+            'totalUsers' => \App\Models\User::where('is_admin', false)->count(),
+            'totalApplications' => Application::count(),
+        ]);
+    }
+
+    public function builder(Exam $exam): View
+    {
+        return view('admin.builder', [
+            'exam' => $exam->load('formFields'),
+            'fieldTypes' => FormField::FIELD_TYPES,
         ]);
     }
 
@@ -88,9 +99,9 @@ class AdminController extends Controller
     {
         $validated = $request->validate($this->examValidationRules());
 
-        Exam::create($validated);
+        $exam = Exam::create($validated);
 
-        return back()->with('status', 'Exam created successfully.');
+        return redirect()->route('admin.exams.builder', $exam)->with('status', 'Exam created successfully. Now you can add fields to your form.');
     }
 
     public function updateExam(Request $request, Exam $exam): RedirectResponse

@@ -15,235 +15,145 @@
             </div>
         </div>
 
-        <div class="row g-4 mb-4">
+        <!-- Stats Section -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-primary text-white">
+                    <div class="card-body p-4 text-center">
+                        <h1 class="fw-bold mb-1">{{ $totalExams }}</h1>
+                        <p class="mb-0 opacity-75">Total Forms Created</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-dark text-white">
+                    <div class="card-body p-4 text-center">
+                        <h1 class="fw-bold mb-1">{{ $totalUsers }}</h1>
+                        <p class="mb-0 opacity-75">Total Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-info text-white">
+                    <div class="card-body p-4 text-center">
+                        <h1 class="fw-bold mb-1">{{ $totalApplications }}</h1>
+                        <p class="mb-0 opacity-75">Total Applications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Create Form Section -->
             <div class="col-lg-4">
                 <div class="card border-0 shadow-lg rounded-4 h-100">
                     <div class="card-body p-4">
-                        <h4 class="fw-bold text-primary mb-3">Create Exam</h4>
+                        <h4 class="fw-bold text-primary mb-3">Create New Form</h4>
+                        <p class="text-muted small mb-4">Fill in the basic details to create a new exam/form. You can add fields in the next step.</p>
                         <form method="POST" action="{{ route('admin.exams.store') }}" class="row g-3">
                             @csrf
                             <div class="col-12">
-                                <input type="text" name="title" class="form-control" placeholder="Exam Title" required>
+                                <label class="small text-muted">Form Title</label>
+                                <input type="text" name="title" class="form-control" placeholder="e.g. Admission 2024" required>
                             </div>
                             <div class="col-12">
-                                <textarea name="description" class="form-control" rows="3" placeholder="Description" required></textarea>
+                                <label class="small text-muted">Description</label>
+                                <textarea name="description" class="form-control" rows="3" placeholder="Short description..." required></textarea>
                             </div>
                             <div class="col-md-6">
+                                <label class="small text-muted">Category</label>
                                 <input type="text" name="category" class="form-control" placeholder="Category">
                             </div>
                             <div class="col-md-6">
-                                <input type="number" step="0.01" name="fee" class="form-control" placeholder="Fee" required>
+                                <label class="small text-muted">Application Fee</label>
+                                <input type="number" step="0.01" name="fee" class="form-control" placeholder="0.00" required>
                             </div>
-                            <div class="col-md-6">
-                                <input type="text" name="detail_label" class="form-control" placeholder="Extra label">
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" name="detail_value" class="form-control" placeholder="Extra value">
-                            </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
+                                <label class="small text-muted">Last Date to Apply</label>
                                 <input type="date" name="last_date" class="form-control" required>
                             </div>
-                            <div class="col-md-6">
-                                <select name="status" class="form-select" required>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
-                                </select>
-                            </div>
                             <div class="col-12">
-                                <button class="btn btn-primary w-100 rounded-pill">Add Exam</button>
+                                <button class="btn btn-primary w-100 rounded-pill py-2">
+                                    <i class="fas fa-plus-circle me-1"></i> Create & Continue
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- Existing Forms Section -->
             <div class="col-lg-8">
                 <div class="card border-0 shadow-lg rounded-4 h-100">
                     <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                            <h4 class="fw-bold text-primary mb-0">Exam + Form Builder</h4>
-                            <span class="small text-muted">Create fields manually for each exam. Users will see only those fields.</span>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold text-primary mb-0">Manage Existing Forms</h4>
                         </div>
-                        <div class="row g-3">
-                            @forelse ($exams as $exam)
-                                <div class="col-12">
-                                    <div class="border rounded-4 p-3">
-                                        <form method="POST" action="{{ route('admin.exams.update', $exam) }}" class="row g-2 align-items-end">
-                                            @csrf
-                                            @method('PATCH')
-                                            <div class="col-md-4">
-                                                <label class="small text-muted">Title</label>
-                                                <input type="text" name="title" class="form-control" value="{{ $exam->title }}" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="small text-muted">Last Date</label>
-                                                <input type="date" name="last_date" class="form-control" value="{{ $exam->last_date->format('Y-m-d') }}" required>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <label class="small text-muted">Fee</label>
-                                                <input type="number" step="0.01" name="fee" class="form-control" value="{{ $exam->fee }}" required>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <label class="small text-muted">Status</label>
-                                                <select name="status" class="form-select">
-                                                    <option value="active" @selected($exam->status === 'active')>Active</option>
-                                                    <option value="inactive" @selected($exam->status === 'inactive')>Inactive</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="category" class="form-control" value="{{ $exam->category }}" placeholder="Category">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="detail_label" class="form-control" value="{{ $exam->detail_label }}" placeholder="Detail label">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <input type="text" name="detail_value" class="form-control" value="{{ $exam->detail_value }}" placeholder="Detail value">
-                                            </div>
-                                            <div class="col-md-3">
-                                                <button class="btn btn-dark btn-sm w-100">Save Exam</button>
-                                            </div>
-                                            <div class="col-12">
-                                                <textarea name="description" class="form-control" rows="2" required>{{ $exam->description }}</textarea>
-                                            </div>
-                                        </form>
 
-                                        <div class="d-flex gap-2 mt-2 mb-3">
-                                            <form method="POST" action="{{ route('admin.exams.toggle', $exam) }}">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button class="btn btn-outline-primary btn-sm">{{ $exam->status === 'active' ? 'Deactivate' : 'Activate' }}</button>
-                                            </form>
-                                            <form method="POST" action="{{ route('admin.exams.destroy', $exam) }}">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-outline-danger btn-sm">Delete</button>
-                                            </form>
-                                        </div>
-
-                                        <div class="border-top pt-3">
-                                            <h6 class="fw-bold text-primary mb-3">Create Form Field</h6>
-                                            <form method="POST" action="{{ route('admin.fields.store', $exam) }}" class="row g-2">
-                                                @csrf
-                                                <div class="col-md-2">
-                                                    <input type="text" name="label" class="form-control" placeholder="Label" required>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle border-top">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Last Date</th>
+                                        <th>Fields</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($exams as $exam)
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold">{{ $exam->title }}</div>
+                                                <div class="small text-muted">{{ $exam->category }}</div>
+                                            </td>
+                                            <td>{{ $exam->last_date->format('d M, Y') }}</td>
+                                            <td>
+                                                <span class="badge bg-light text-primary border">{{ $exam->formFields->count() }} fields</span>
+                                            </td>
+                                            <td>
+                                                @if($exam->status === 'active')
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3">Active</span>
+                                                @else
+                                                    <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-3">Inactive</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="{{ route('admin.exams.builder', $exam) }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                                                        <i class="fas fa-edit me-1"></i> Edit Form
+                                                    </a>
+                                                    <form method="POST" action="{{ route('admin.exams.toggle', $exam) }}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button class="btn btn-outline-secondary btn-sm rounded-circle" title="{{ $exam->status === 'active' ? 'Deactivate' : 'Activate' }}">
+                                                            <i class="fas fa-power-off"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('admin.exams.destroy', $exam) }}" onsubmit="return confirm('Delete this form and all its fields?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-outline-danger btn-sm rounded-circle">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
-                                                <div class="col-md-2">
-                                                    <input type="text" name="name" class="form-control" placeholder="field_name">
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <select name="type" class="form-select" required>
-                                                        @foreach ($fieldTypes as $type)
-                                                            <option value="{{ $type }}">{{ ucfirst($type) }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <input type="text" name="options_text" class="form-control" placeholder="Options: Male,Female">
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <input type="number" name="sort_order" class="form-control" placeholder="Sort">
-                                                </div>
-                                                <div class="col-md-2 d-flex align-items-center gap-2">
-                                                    <div class="form-check">
-                                                        <input type="hidden" name="is_required" value="0">
-                                                        <input type="checkbox" name="is_required" value="1" class="form-check-input" id="required-{{ $exam->id }}">
-                                                        <label class="form-check-label small" for="required-{{ $exam->id }}">Req</label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <input type="hidden" name="is_repeatable" value="0">
-                                                        <input type="checkbox" name="is_repeatable" value="1" class="form-check-input" id="repeatable-{{ $exam->id }}">
-                                                        <label class="form-check-label small" for="repeatable-{{ $exam->id }}">Rep</label>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <input type="number" name="max_repeat" class="form-control" placeholder="Max">
-                                                </div>
-                                                <div class="col-12">
-                                                    <button class="btn btn-primary btn-sm">Add Field</button>
-                                                </div>
-                                            </form>
-
-                                            <div class="row g-2 mt-2">
-                                                @forelse ($exam->formFields as $field)
-                                                    <div class="col-12">
-                                                        <div class="bg-light rounded-4 p-3">
-                                                            <form method="POST" action="{{ route('admin.fields.update', [$exam, $field]) }}" class="row g-2 align-items-end">
-                                                                @csrf
-                                                                @method('PATCH')
-                                                                <div class="col-md-3">
-                                                                    <label class="small text-muted">Label</label>
-                                                                    <input type="text" name="label" class="form-control" value="{{ $field->label }}" required>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label class="small text-muted">Name</label>
-                                                                    <input type="text" name="name" class="form-control" value="{{ $field->name }}">
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label class="small text-muted">Type</label>
-                                                                    <select name="type" class="form-select" required>
-                                                                        @foreach ($fieldTypes as $type)
-                                                                            <option value="{{ $type }}" @selected($field->type === $type)>{{ ucfirst($type) }}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <label class="small text-muted">Sort</label>
-                                                                    <input type="number" name="sort_order" class="form-control" value="{{ $field->sort_order }}">
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <label class="small text-muted">Options</label>
-                                                                    <input type="text" name="options_text" class="form-control" value="{{ implode(', ', $field->options ?? []) }}" placeholder="A,B,C">
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-check mt-4">
-                                                                        <input type="hidden" name="is_required" value="0">
-                                                                        <input type="checkbox" name="is_required" value="1" class="form-check-input" id="field-required-{{ $field->id }}" @checked($field->is_required)>
-                                                                        <label class="form-check-label small" for="field-required-{{ $field->id }}">Required</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2">
-                                                                    <div class="form-check mt-4">
-                                                                        <input type="hidden" name="is_repeatable" value="0">
-                                                                        <input type="checkbox" name="is_repeatable" value="1" class="form-check-input" id="field-repeatable-{{ $field->id }}" @checked($field->is_repeatable)>
-                                                                        <label class="form-check-label small" for="field-repeatable-{{ $field->id }}">Repeatable</label>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-2 mt-4">
-                                                                    <input type="number" name="max_repeat" class="form-control" value="{{ $field->max_repeat }}" placeholder="Max">
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="small text-muted mt-4">Field type: <span class="fw-semibold text-capitalize">{{ $field->type }}</span></div>
-                                                                </div>
-                                                                <div class="col-md-2 d-flex gap-2">
-                                                                    <button class="btn btn-dark btn-sm flex-fill">Save</button>
-                                                                </div>
-                                                            </form>
-                                                            <form method="POST" action="{{ route('admin.fields.destroy', [$exam, $field]) }}" class="mt-2">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button class="btn btn-outline-danger btn-sm">Delete Field</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                @empty
-                                                    <div class="col-12">
-                                                        <div class="alert alert-light border rounded-4 mb-0">No form fields added for this exam yet.</div>
-                                                    </div>
-                                                @endforelse
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="col-12">
-                                    <div class="alert alert-light border rounded-4 mb-0">No exams created yet.</div>
-                                </div>
-                            @endforelse
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">No forms created yet.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
     </div>
 </section>
