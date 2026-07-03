@@ -33,9 +33,21 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/apply-online/{exam}', [ApplicationController::class, 'create'])->name('application.create');
     Route::post('/apply-online', [ApplicationController::class, 'store'])->name('application.store');
+
+    // ---------------------------------------------------------------------------
+    // Razorpay Payment Routes
+    // ---------------------------------------------------------------------------
+    // Step 1: Show payment page (creates Razorpay Order server-side)
     Route::get('/payments/{application}', [PaymentController::class, 'create'])->name('payments.create');
-    Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+
+    // Step 2: AJAX endpoint — verify Razorpay signature & save payment
+    Route::post('/payments/verify', [PaymentController::class, 'store'])->name('payments.store');
+
+    // Step 3: Post-payment result pages
+    Route::get('/payments/{application}/success', [PaymentController::class, 'success'])->name('payments.success');
+    Route::get('/payments/{application}/failed', [PaymentController::class, 'failed'])->name('payments.failed');
 });
+
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function (): void {
     Route::get('/', [AdminController::class, 'index'])->name('index');
