@@ -170,7 +170,7 @@
                             <i class="fas fa-check"></i>
                         </div>
                         <h1 class="success-title">Payment Successful!</h1>
-                        <p class="success-subtitle">Your application has been submitted successfully</p>
+                        <p class="success-subtitle">Your application has been <strong style="color:#4ade80;">Approved</strong> automatically! 🎉</p>
                     </div>
 
                     <div class="success-body">
@@ -191,6 +191,14 @@
                                 <div class="receipt-row">
                                     <span class="receipt-label">Status</span>
                                     <span class="receipt-value"><span class="badge-success-pill">✓ PAID</span></span>
+                                </div>
+                                <div class="receipt-row">
+                                    <span class="receipt-label">Application Status</span>
+                                    <span class="receipt-value">
+                                        <span style="background:rgba(22,163,74,0.25);color:#4ade80;border:1px solid rgba(34,197,94,0.5);border-radius:999px;padding:0.2rem 0.8rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                                            ✓ APPROVED
+                                        </span>
+                                    </span>
                                 </div>
                                 <div class="receipt-row">
                                     <span class="receipt-label">Exam / Form</span>

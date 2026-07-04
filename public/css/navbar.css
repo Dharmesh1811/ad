@@ -202,6 +202,26 @@ body {
     }
 }
 
+/* --- CUSTOM TOGGLER ICON (Hamburger / Close) --- */
+.custom-toggler {
+    font-size: 1.4rem;
+    color: var(--brd-blue);
+    padding: 6px 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.custom-toggler:focus {
+    box-shadow: none;
+}
+
+.custom-toggler .toggler-icon-bar,
+.custom-toggler .toggler-icon-close {
+    color: var(--brd-blue);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
 /* Jo page active hai uski link ka color change aur niche line */
 .nav-link.active {
     color: var(--brd-orange) !important; /* Orange color active page ke liye */

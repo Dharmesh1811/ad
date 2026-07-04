@@ -22,9 +22,10 @@
             </a>
         @endguest
 
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navContent">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0 custom-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navContent" aria-expanded="false">
+            <i class="fas fa-bars toggler-icon-bar"></i>
+            <i class="fas fa-times toggler-icon-close d-none"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="navContent">
@@ -33,7 +34,7 @@
                 </li>
                 <li class="nav-item">
                     @auth
-                        <a class="nav-link {{ Request::is('dashboard') || Request::is('apply-online/*') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="fas fa-edit me-1"></i>
+                        <a class="nav-link {{ Request::is('apply-online/*') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="fas fa-edit me-1"></i>
                             Apply Online</a>
                     @else
                         <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginPortal"><i class="fas fa-edit me-1"></i>
@@ -53,6 +54,24 @@
                     @endif
                 @endauth
             </ul>
+
+            {{-- Mobile logout (visible only on mobile) --}}
+            @auth
+                <div class="d-lg-none mt-2 pt-2 border-top">
+                    <div class="d-flex align-items-center justify-content-between px-1 mb-2">
+                        <span class="text-muted small fw-semibold">
+                            <i class="fas fa-user-circle me-1 text-primary"></i>
+                            {{ auth()->user()->application_number }}
+                        </span>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="btn btn-glow-login w-100 py-2">
+                            <i class="fas fa-right-from-bracket me-2"></i>LOGOUT
+                        </button>
+                    </form>
+                </div>
+            @endauth
             @auth
                 <div class="d-none d-lg-flex align-items-center gap-2">
                     <span class="text-white small fw-semibold">{{ auth()->user()->application_number }}</span>
@@ -196,6 +215,20 @@
             input.type = 'password';
             icon.classList.replace('fa-eye-slash', 'fa-eye');
         }
+    }
+
+    // Toggle hamburger <-> close icon
+    const toggler = document.querySelector('.custom-toggler');
+    const navCollapse = document.getElementById('navContent');
+    if (toggler && navCollapse) {
+        navCollapse.addEventListener('show.bs.collapse', function () {
+            toggler.querySelector('.toggler-icon-bar').classList.add('d-none');
+            toggler.querySelector('.toggler-icon-close').classList.remove('d-none');
+        });
+        navCollapse.addEventListener('hide.bs.collapse', function () {
+            toggler.querySelector('.toggler-icon-bar').classList.remove('d-none');
+            toggler.querySelector('.toggler-icon-close').classList.add('d-none');
+        });
     }
 </script>
 @endpush

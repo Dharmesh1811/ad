@@ -249,9 +249,9 @@ class PaymentController extends Controller
                     'transaction_id'      => $validated['razorpay_payment_id'], // Legacy field
                 ]);
 
-                // Mark the application as submitted
+                // Mark the application as approved (payment verified automatically approves)
                 $application->update([
-                    'status'       => 'submitted',
+                    'status'       => 'approved',
                     'submitted_at' => now(),
                 ]);
             });

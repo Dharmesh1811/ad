@@ -48,10 +48,10 @@
             <div class="col-lg-4 mb-4">
                 <h6 class="fw-bold mb-3">Contact Us</h6>
                 <ul class="list-unstyled text-muted small">
-                    <li class="mb-2"><i class="fas fa-location-dot me-2 text-primary"></i> Surat, Gujarat, India
+                    <li class="mb-2"><i class="fas fa-location-dot me-2 text-primary"></i>Opposite Sugar mill, Karnal Road, Kaithal, Hariyana, India 136027
                     </li>
-                    <li class="mb-2"><i class="fas fa-phone me-2 text-primary"></i> +91 98765 43210</li>
-                    <li class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i> support@examportal.com</li>
+                    <li class="mb-2"><i class="fas fa-phone me-2 text-primary"></i>+91 98765 43210</li>
+                    <li class="mb-2"><i class="fas fa-envelope me-2 text-primary"></i>info@brdeducation.com</li>
                 </ul>
                 <div class="mt-3">
                     <span class="small fw-bold text-dark">Managed by
