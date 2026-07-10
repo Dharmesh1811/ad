@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 
 @section('title', 'User Master | Admin Panel')
 
@@ -95,8 +95,8 @@
                                                             <div class="mb-2 border-bottom pb-1">
                                                                 <div class="text-muted fw-bold">{{ $field->label }}:</div>
                                                                 @if ($field->type === 'file' && $val)
-                                                                    <a href="{{ asset('storage/' . $val) }}" target="_blank">
-                                                                        <img src="{{ asset('storage/' . $val) }}" class="img-fluid rounded border mt-1" style="max-height: 80px;">
+                                                                    <a href="{{ asset($val) }}" target="_blank">
+                                                                        <img src="{{ asset($val) }}" class="img-fluid rounded border mt-1" style="max-height: 80px;">
                                                                     </a>
                                                                 @else
                                                                     <div class="text-dark">{{ is_array($val) ? implode(', ', $val) : ($val ?? 'N/A') }}</div>
@@ -114,7 +114,7 @@
                                         @forelse ($user->payments as $pay)
                                             <div class="mb-1">
                                                 <span class="small fw-semibold {{ $pay->status === 'paid' ? 'text-success' : 'text-danger' }}">
-                                                    ₹{{ number_format($pay->amount, 2) }} - {{ strtoupper($pay->status) }}
+                                                    â‚¹{{ number_format($pay->amount, 2) }} - {{ strtoupper($pay->status) }}
                                                 </span>
                                                 <div class="text-muted" style="font-size: 10px;">{{ $pay->exam?->title }}</div>
                                             </div>

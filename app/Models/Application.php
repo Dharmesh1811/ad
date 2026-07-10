@@ -16,6 +16,14 @@ class Application extends Model
         'form_data',
         'submitted_at',
         'status',
+        'full_name',
+        'dob',
+        'gender',
+        'mobile',
+        'email',
+        'address',
+        'photo',
+        'signature',
     ];
 
     protected $casts = [

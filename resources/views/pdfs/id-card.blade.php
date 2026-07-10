@@ -1,4 +1,4 @@
-<div class="admit-card-box p-4 p-md-5 border rounded-4 shadow-sm bg-white position-relative overflow-hidden">
+﻿<div class="admit-card-box p-4 p-md-5 border rounded-4 shadow-sm bg-white position-relative overflow-hidden">
     <div class="admit-header d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
         <div>
             <h4 class="fw-bold mb-1 text-primary">Exam Portal Student ID Card</h4>
@@ -37,7 +37,7 @@
         </div>
         <div class="col-md-4 text-center">
             @if ($application?->photo)
-                <img src="{{ asset('storage/' . $application->photo) }}" alt="Candidate Photo" class="img-fluid rounded border" style="max-height: 170px;">
+                <img src="{{ asset($application->photo) }}" alt="Candidate Photo" class="img-fluid rounded border" style="max-height: 170px;">
             @else
                 <div class="photo-placeholder bg-light mx-auto border d-flex align-items-center justify-content-center" style="width: 120px; height: 150px; border-style: dashed !important;">
                     <i class="fas fa-user text-muted fs-1"></i>

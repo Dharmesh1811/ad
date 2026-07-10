@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -167,8 +167,8 @@
                 </div>
 
                 <div class="photo-box">
-                    @if(isset($application->photo) && file_exists(public_path('storage/' . $application->photo)))
-                        <img src="{{ public_path('storage/' . $application->photo) }}" alt="Candidate Photo">
+                    @if(isset($application->photo) && file_exists(public_path($application->photo)))
+                        <img src="{{ public_path($application->photo) }}" alt="Candidate Photo">
                     @else
                         <div style="padding-top: 70px; color: #999;">PHOTO</div>
                     @endif
@@ -185,8 +185,8 @@
                     </div>
                     <div style="float: right; width: 40%; text-align: center;">
                         <div class="signature-box">
-                            @if(isset($application->signature) && file_exists(public_path('storage/' . $application->signature)))
-                                <img src="{{ public_path('storage/' . $application->signature) }}" style="height: 50px; width: auto;" alt="Signature">
+                            @if(isset($application->signature) && file_exists(public_path($application->signature)))
+                                <img src="{{ public_path($application->signature) }}" style="height: 50px; width: auto;" alt="Signature">
                             @else
                                 <div style="height: 50px;"></div>
                             @endif

@@ -128,6 +128,9 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3 text-end">
+                                <a href="{{ route('password.request') }}" class="small text-decoration-none">Forgot Password?</a>
+                            </div>
                             @error('password_login')
                                 <div class="text-danger small mb-3">{{ $message }}</div>
                             @enderror

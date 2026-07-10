@@ -15,6 +15,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/auth/register-password', [AuthController::class, 'registerPassword'])->name('auth.register-password');
 Route::post('/auth/login-password', [AuthController::class, 'loginPassword'])->name('auth.login-password');
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 Route::get('/track-status', [StatusController::class, 'index'])->name('status.index');
@@ -22,6 +26,8 @@ Route::post('/check-status', [StatusController::class, 'show'])->name('status.sh
 Route::get('/admit-card', [AdmitCardController::class, 'index'])->name('admit.index');
 Route::post('/admit-card', [AdmitCardController::class, 'show'])->name('admit.show');
 Route::get('/admit-card/pdf/{application}', [AdmitCardController::class, 'download'])->name('id-card.download-pdf');
+
+
 
 // Public ID Card Download Routes
 Route::get('/download-id-card', [IdCardController::class, 'form'])->name('id-card.form');
@@ -33,6 +39,7 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/apply-online/{exam}', [ApplicationController::class, 'create'])->name('application.create');
     Route::post('/apply-online', [ApplicationController::class, 'store'])->name('application.store');
+    Route::get('/application/pdf/{application}', [ApplicationController::class, 'downloadPdf'])->name('application.pdf');
 
     // ---------------------------------------------------------------------------
     // Razorpay Payment Routes

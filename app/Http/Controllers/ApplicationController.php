@@ -25,12 +25,20 @@ class ApplicationController extends Controller
             ['status' => 'not_filled']
         );
 
+        $payment = $request->user()->payments->firstWhere('exam_id', $exam->id);
+        $isReadOnly = in_array($application->status, ['submitted', 'approved']) ||
+                      ($payment?->status === 'paid') ||
+                      ($payment?->payment_status === 'paid');
+
         return view('apply-online', [
             'application' => $application,
             'exam' => $exam,
             'fields' => $exam->formFields,
+            'isReadOnly' => $isReadOnly,
         ]);
     }
+
+
 
     public function store(Request $request): RedirectResponse
     {
@@ -62,8 +70,12 @@ class ApplicationController extends Controller
                 if ($field->is_repeatable) {
                     if ($request->hasFile($field->name)) {
                         $paths = [];
+                        $uploadDir = public_path('uploads');
+                        if (!is_dir($uploadDir)) { mkdir($uploadDir, 0755, true); }
                         foreach ($request->file($field->name) as $file) {
-                            $paths[] = $file->store('uploads', 'public');
+                            $filename = 'uploads/' . \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
+                            $file->move($uploadDir, basename($filename));
+                            $paths[] = $filename;
                         }
                         $formData[$field->name] = array_merge((array)($existingData[$field->name] ?? []), $paths);
                     } else {
@@ -71,7 +83,12 @@ class ApplicationController extends Controller
                     }
                 } else {
                     if ($request->hasFile($field->name)) {
-                        $formData[$field->name] = $request->file($field->name)->store('uploads', 'public');
+                        $file = $request->file($field->name);
+                        $uploadDir = public_path('uploads');
+                        if (!is_dir($uploadDir)) { mkdir($uploadDir, 0755, true); }
+                        $filename = 'uploads/' . \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
+                        $file->move($uploadDir, basename($filename));
+                        $formData[$field->name] = $filename;
                     }
                 }
             } else {
@@ -86,9 +103,46 @@ class ApplicationController extends Controller
             'dob' => $formData['dob'] ?? null,
         ], fn ($value) => filled($value)));
 
+        // Find matches for application columns based on fields name/label
+        $photoField = $fields->first(fn($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'photo') || str_contains(Str::lower($f->label), 'photo')));
+        $sigField = $fields->first(fn($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'signature') || str_contains(Str::lower($f->label), 'signature')));
+        
+        $nameField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'name') || str_contains(Str::lower($f->label), 'name'));
+        $dobField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'dob') || str_contains(Str::lower($f->label), 'birth') || str_contains(Str::lower($f->label), 'dob'));
+        $genderField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'gender') || str_contains(Str::lower($f->label), 'gender'));
+        $mobileField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'mobile') || str_contains(Str::lower($f->name), 'phone') || str_contains(Str::lower($f->label), 'mobile'));
+        $emailField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'email') || str_contains(Str::lower($f->label), 'email'));
+        $addressField = $fields->first(fn($f) => str_contains(Str::lower($f->name), 'address') || str_contains(Str::lower($f->label), 'address'));
+
+        $photoVal = null;
+        if ($photoField) {
+            $val = $formData[$photoField->name] ?? null;
+            $photoVal = is_array($val) ? ($val[0] ?? null) : $val;
+        } else {
+            $photoVal = $formData['photo'] ?? null;
+            $photoVal = is_array($photoVal) ? ($photoVal[0] ?? null) : $photoVal;
+        }
+
+        $sigVal = null;
+        if ($sigField) {
+            $val = $formData[$sigField->name] ?? null;
+            $sigVal = is_array($val) ? ($val[0] ?? null) : $val;
+        } else {
+            $sigVal = $formData['signature'] ?? null;
+            $sigVal = is_array($sigVal) ? ($sigVal[0] ?? null) : $sigVal;
+        }
+
         $application->fill([
             'form_data' => $formData,
             'status' => 'not_filled',
+            'full_name' => $nameField ? ($formData[$nameField->name] ?? null) : ($formData['full_name'] ?? null),
+            'dob' => $dobField ? ($formData[$dobField->name] ?? null) : ($formData['dob'] ?? null),
+            'gender' => $genderField ? ($formData[$genderField->name] ?? null) : ($formData['gender'] ?? null),
+            'mobile' => $mobileField ? ($formData[$mobileField->name] ?? null) : ($formData['mobile'] ?? null),
+            'email' => $emailField ? ($formData[$emailField->name] ?? null) : ($formData['email'] ?? null),
+            'address' => $addressField ? ($formData[$addressField->name] ?? null) : ($formData['address'] ?? null),
+            'photo' => $photoVal,
+            'signature' => $sigVal,
         ]);
         $application->user()->associate($request->user());
         $application->exam()->associate($exam);
@@ -100,5 +154,46 @@ class ApplicationController extends Controller
         );
 
         return redirect()->route('payments.create', $application)->with('status', 'Form saved. Complete payment to submit the application.');
+    }
+
+    public function downloadPdf(Request $request, Application $application)
+    {
+        abort_unless(
+            $application->user_id === $request->user()->id,
+            403,
+            'You are not authorized to view this application.'
+        );
+
+        $application->loadMissing(['exam.formFields', 'user.payments']);
+        
+        $payment = $request->user()->payments->firstWhere('exam_id', $application->exam_id);
+        
+        $fields = $application->exam->formFields;
+        
+        $photoField = $fields->first(fn($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'photo') || str_contains(Str::lower($f->label), 'photo')));
+        $sigField = $fields->first(fn($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'signature') || str_contains(Str::lower($f->label), 'signature')));
+
+        $photoVal = $application->photo ?? ($photoField ? data_get($application->form_data, $photoField->name) : null);
+        if (is_array($photoVal)) {
+            $photoVal = $photoVal[0] ?? null;
+        }
+
+        $sigVal = $application->signature ?? ($sigField ? data_get($application->form_data, $sigField->name) : null);
+        if (is_array($sigVal)) {
+            $sigVal = $sigVal[0] ?? null;
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.application', [
+            'application' => $application,
+            'exam' => $application->exam,
+            'fields' => $fields,
+            'payment' => $payment,
+            'photoVal' => $photoVal,
+            'sigVal' => $sigVal,
+        ]);
+
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('Application_' . $application->user->application_number . '_' . Str::slug($application->exam->title) . '.pdf');
     }
 }

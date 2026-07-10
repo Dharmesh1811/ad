@@ -74,10 +74,26 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2 flex-wrap">
-                                <a href="{{ route('application.create', $application->exam) }}" class="btn btn-primary rounded-pill px-4">
-                                    <i class="fas fa-edit me-2"></i> View / Edit
-                                </a>
-                                @if(($payment?->status ?? 'pending') !== 'paid')
+                                @if($application->exam)
+                                    @php
+                                        $isApprovedOrPaid = in_array($application->status, ['submitted', 'approved']) ||
+                                                            ($payment?->status ?? 'pending') === 'paid' ||
+                                                            ($payment?->payment_status ?? 'pending') === 'paid';
+                                    @endphp
+                                    <a href="{{ route('application.create', $application->exam) }}" class="btn btn-primary rounded-pill px-4">
+                                        @if($isApprovedOrPaid)
+                                            <i class="fas fa-eye me-2"></i> View Form
+                                        @else
+                                            <i class="fas fa-edit me-2"></i> View / Edit
+                                        @endif
+                                    </a>
+                                    @if($isApprovedOrPaid)
+                                        <a href="{{ route('application.pdf', $application) }}" class="btn btn-outline-danger rounded-pill px-4">
+                                            <i class="fas fa-file-pdf me-2"></i> Download PDF
+                                        </a>
+                                    @endif
+                                @endif
+                                @if(($payment?->status ?? 'pending') !== 'paid' && ($payment?->payment_status ?? 'pending') !== 'paid')
                                     <a href="{{ route('payments.create', $application) }}" class="btn btn-dark rounded-pill px-4">
                                         <i class="fas fa-credit-card me-2"></i> Pay Fee
                                     </a>
