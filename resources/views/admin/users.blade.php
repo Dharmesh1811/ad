@@ -95,8 +95,8 @@
                                                             <div class="mb-2 border-bottom pb-1">
                                                                 <div class="text-muted fw-bold">{{ $field->label }}:</div>
                                                                 @if ($field->type === 'file' && $val)
-                                                                    <a href="{{ asset($val) }}" target="_blank">
-                                                                        <img src="{{ asset($val) }}" class="img-fluid rounded border mt-1" style="max-height: 80px;">
+                                                                    <a href="{{ \App\Models\Application::fileUrl($val) }}" target="_blank">
+                                                                        <img src="{{ \App\Models\Application::fileUrl($val) }}" class="img-fluid rounded border mt-1" style="max-height: 80px;">
                                                                     </a>
                                                                 @else
                                                                     <div class="text-dark">{{ is_array($val) ? implode(', ', $val) : ($val ?? 'N/A') }}</div>

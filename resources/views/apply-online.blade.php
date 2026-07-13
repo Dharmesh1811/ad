@@ -106,12 +106,12 @@
                                                             @if($val)
                                                                 @if(is_array($val))
                                                                     @foreach($val as $filePath)
-                                                                        <a href="{{ asset($filePath) }}" target="_blank" class="btn btn-sm btn-light border me-1 mb-1">
+                                                                        <a href="{{ \App\Models\Application::fileUrl($filePath) }}" target="_blank" class="btn btn-sm btn-light border me-1 mb-1">
                                                                             <i class="fas fa-file-alt text-primary me-1"></i> View File
                                                                         </a>
                                                                     @endforeach
                                                                 @else
-                                                                    <a href="{{ asset($val) }}" target="_blank" class="btn btn-sm btn-light border">
+                                                                    <a href="{{ \App\Models\Application::fileUrl($val) }}" target="_blank" class="btn btn-sm btn-light border">
                                                                         <i class="fas fa-file-alt text-primary me-1"></i> View File
                                                                     </a>
                                                                 @endif
@@ -143,7 +143,7 @@
                                                     if (is_array($photoVal)) $photoVal = $photoVal[0] ?? null;
                                                 @endphp
                                                 @if($photoVal)
-                                                    <img src="{{ asset($photoVal) }}" alt="Photo" class="rounded img-thumbnail" style="max-height: 180px; width: 140px; object-fit: cover; border: 1px solid #dee2e6;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                    <img src="{{ \App\Models\Application::fileUrl($photoVal) }}" alt="Photo" class="rounded img-thumbnail" style="max-height: 180px; width: 140px; object-fit: cover; border: 1px solid #dee2e6;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                                     <div class="d-flex align-items-center justify-content-center bg-light text-muted border rounded" style="height: 180px; width: 140px; border-style: dashed !important; display:none !important;">
                                                         <span class="small">No Photo</span>
                                                     </div>
@@ -165,7 +165,7 @@
                                                     if (is_array($sigVal)) $sigVal = $sigVal[0] ?? null;
                                                 @endphp
                                                 @if($sigVal)
-                                                    <img src="{{ asset($sigVal) }}" alt="Signature" class="rounded" style="max-height: 60px; width: 180px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                                    <img src="{{ \App\Models\Application::fileUrl($sigVal) }}" alt="Signature" class="rounded" style="max-height: 60px; width: 180px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                                     <div class="d-flex align-items-center justify-content-center bg-light text-muted border rounded" style="height: 60px; width: 180px; border-style: dashed !important; display:none !important;">
                                                         <span class="small">No Signature</span>
                                                     </div>
@@ -304,8 +304,8 @@
                                             @if (is_string($val) && filled($val))
                                                 <div class="mt-2 p-2 border rounded bg-white d-inline-block">
                                                     <div class="mb-2 text-muted small"><i class="fas fa-image me-1"></i>Uploaded {{ $field->label }}:</div>
-                                                    <img src="{{ asset($val) }}" alt="{{ $field->label }}" class="img-thumbnail d-block mb-2" style="max-height: 150px; width: auto; object-fit: contain;">
-                                                    <a href="{{ asset($val) }}" target="_blank" class="small text-decoration-none">
+                                                    <img src="{{ \App\Models\Application::fileUrl($val) }}" alt="{{ $field->label }}" class="img-thumbnail d-block mb-2" style="max-height: 150px; width: auto; object-fit: contain;">
+                                                    <a href="{{ \App\Models\Application::fileUrl($val) }}" target="_blank" class="small text-decoration-none">
                                                         <i class="fas fa-external-link-alt me-1"></i>View full size
                                                     </a>
                                                 </div>

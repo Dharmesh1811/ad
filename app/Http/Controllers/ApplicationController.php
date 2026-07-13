@@ -9,10 +9,29 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ApplicationController extends Controller
 {
     use BuildsDynamicForms;
+
+    public function showUpload(string $path): BinaryFileResponse
+    {
+        $path = ltrim($path, '/');
+
+        if (Storage::disk('public')->exists($path)) {
+            $fullPath = Storage::disk('public')->path($path);
+            return response()->file($fullPath);
+        }
+
+        $publicPath = public_path($path);
+        if (file_exists($publicPath)) {
+            return response()->file($publicPath);
+        }
+
+        abort(404);
+    }
 
     public function create(Request $request, Exam $exam): View|RedirectResponse
     {
@@ -70,11 +89,9 @@ class ApplicationController extends Controller
                 if ($field->is_repeatable) {
                     if ($request->hasFile($field->name)) {
                         $paths = [];
-                        $uploadDir = public_path('uploads');
-                        if (!is_dir($uploadDir)) { mkdir($uploadDir, 0755, true); }
                         foreach ($request->file($field->name) as $file) {
-                            $filename = 'uploads/' . \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
-                            $file->move($uploadDir, basename($filename));
+                            $filename = 'uploads/' . Str::random(40) . '.' . $file->getClientOriginalExtension();
+                            Storage::disk('public')->putFileAs('uploads', $file, basename($filename));
                             $paths[] = $filename;
                         }
                         $formData[$field->name] = array_merge((array)($existingData[$field->name] ?? []), $paths);
@@ -84,10 +101,8 @@ class ApplicationController extends Controller
                 } else {
                     if ($request->hasFile($field->name)) {
                         $file = $request->file($field->name);
-                        $uploadDir = public_path('uploads');
-                        if (!is_dir($uploadDir)) { mkdir($uploadDir, 0755, true); }
-                        $filename = 'uploads/' . \Illuminate\Support\Str::random(40) . '.' . $file->getClientOriginalExtension();
-                        $file->move($uploadDir, basename($filename));
+                        $filename = 'uploads/' . Str::random(40) . '.' . $file->getClientOriginalExtension();
+                        Storage::disk('public')->putFileAs('uploads', $file, basename($filename));
                         $formData[$field->name] = $filename;
                     }
                 }

@@ -33,6 +33,9 @@ Route::get('/admit-card/pdf/{application}', [AdmitCardController::class, 'downlo
 Route::get('/download-id-card', [IdCardController::class, 'form'])->name('id-card.form');
 Route::post('/download-id-card', [IdCardController::class, 'download'])->name('id-card.download');
 Route::get('/captcha/{config?}', [\Mews\Captcha\CaptchaController::class, 'getCaptcha']);
+Route::get('/uploads/{path}', [ApplicationController::class, 'showUpload'])
+    ->where('path', '.*')
+    ->name('uploads.show');
 
 
 Route::middleware('auth')->group(function (): void {

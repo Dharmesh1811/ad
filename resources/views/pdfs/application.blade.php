@@ -227,8 +227,8 @@
                 </td>
                 <td class="photo-col">
                     <div class="photo-box">
-                        @if($photoVal && file_exists(public_path($photoVal)))
-                            <img src="{{ public_path($photoVal) }}" alt="Photo">
+                        @if($photoVal)
+                            <img src="{{ \App\Models\Application::fileUrl($photoVal) }}" alt="Photo">
                         @else
                             <div class="photo-placeholder">PASTE<br>PHOTO HERE</div>
                         @endif
@@ -256,14 +256,12 @@
                             @if($val)
                                 @if(is_array($val))
                                     @foreach($val as $filePath)
-                                        @if(file_exists(public_path($filePath)))
-                                            <div style="margin-bottom: 4px;">
-                                                <a href="{{ asset($filePath) }}" target="_blank" style="text-decoration: none; color: #1d4ed8;">View File ({{ basename($filePath) }})</a>
-                                            </div>
-                                        @endif
+                                        <div style="margin-bottom: 4px;">
+                                            <a href="{{ \App\Models\Application::fileUrl($filePath) }}" target="_blank" style="text-decoration: none; color: #1d4ed8;">View File ({{ basename($filePath) }})</a>
+                                        </div>
                                     @endforeach
                                 @else
-                                    <a href="{{ asset($val) }}" target="_blank" style="text-decoration: none; color: #1d4ed8;">View File ({{ basename($val) }})</a>
+                                    <a href="{{ \App\Models\Application::fileUrl($val) }}" target="_blank" style="text-decoration: none; color: #1d4ed8;">View File ({{ basename($val) }})</a>
                                 @endif
                             @else
                                 <span class="text-muted">Not Uploaded</span>
@@ -324,8 +322,8 @@
                         <tr>
                             <td>
                                 <div class="signature-img-box">
-                                    @if($sigVal && file_exists(public_path($sigVal)))
-                                        <img src="{{ public_path($sigVal) }}" alt="Signature">
+                                    @if($sigVal)
+                                        <img src="{{ \App\Models\Application::fileUrl($sigVal) }}" alt="Signature">
                                     @endif
                                 </div>
                                 <div class="signature-label">Candidate's Signature</div>
