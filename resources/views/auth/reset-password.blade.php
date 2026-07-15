@@ -9,12 +9,10 @@
             <div class="card border-0 shadow-sm rounded-4">
                 <div class="card-body p-4">
                     <h2 class="h4 mb-3">Reset Password</h2>
-                    <p class="text-muted mb-4">Set a new password for your account.</p>
+                    <p class="text-muted mb-4">Set a new password for your account after OTP verification.</p>
 
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
-
-                        <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-floating mb-3">
                             <input type="email" class="form-control stylish-input @error('email') is-invalid @enderror" name="email" id="email" placeholder="Email Address" value="{{ old('email', $email) }}" required>
