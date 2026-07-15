@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\IdCardController;
+use App\Http\Controllers\VacancyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -25,6 +26,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 Route::get('/track-status', [StatusController::class, 'index'])->name('status.index');
 Route::post('/check-status', [StatusController::class, 'show'])->name('status.show');
+Route::get('/vacancies', [VacancyController::class, 'index'])->name('vacancies.index');
 Route::get('/admit-card', [AdmitCardController::class, 'index'])->name('admit.index');
 Route::post('/admit-card', [AdmitCardController::class, 'show'])->name('admit.show');
 Route::get('/admit-card/pdf/{application}', [AdmitCardController::class, 'download'])->name('id-card.download-pdf');

@@ -278,32 +278,34 @@
             @endforeach
         </table>
 
-        <!-- Payment Details -->
-        <div class="section-title">Payment Information</div>
-        @php
-            $isPaid = ($payment?->status ?? 'pending') === 'paid';
-        @endphp
-        <div class="payment-box {{ $isPaid ? 'paid' : '' }}">
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                    <td style="width: 50%; vertical-align: top;">
-                        <div style="font-weight: bold; margin-bottom: 4px;">Transaction ID / Razorpay Payment ID:</div>
-                        <div style="font-family: monospace; font-size: 12px; color: #334155;">{{ $payment?->transaction_id ?? $payment?->razorpay_payment_id ?? 'N/A' }}</div>
-                        
-                        <div style="font-weight: bold; margin-top: 10px; margin-bottom: 4px;">Payment Method:</div>
-                        <div style="text-transform: uppercase; color: #334155;">{{ $payment?->payment_method ?? 'N/A' }}</div>
-                    </td>
-                    <td style="width: 50%; vertical-align: top; text-align: right;">
-                        <div style="font-weight: bold; margin-bottom: 4px;">Amount Paid:</div>
-                        <div style="font-size: 16px; font-weight: bold; color: #166534; margin-bottom: 10px;">â‚¹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</div>
-                        
-                        <span class="payment-status-badge {{ $isPaid ? 'success' : 'pending' }}">
-                            {{ $payment?->status ?? 'pending' }}
-                        </span>
-                    </td>
-                </tr>
-            </table>
-        </div>
+        @unless($exam->module_type === 'vacancy')
+            <!-- Payment Details -->
+            <div class="section-title">Payment Information</div>
+            @php
+                $isPaid = ($payment?->status ?? 'pending') === 'paid';
+            @endphp
+            <div class="payment-box {{ $isPaid ? 'paid' : '' }}">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;">
+                            <div style="font-weight: bold; margin-bottom: 4px;">Transaction ID / Razorpay Payment ID:</div>
+                            <div style="font-family: monospace; font-size: 12px; color: #334155;">{{ $payment?->transaction_id ?? $payment?->razorpay_payment_id ?? 'N/A' }}</div>
+                            
+                            <div style="font-weight: bold; margin-top: 10px; margin-bottom: 4px;">Payment Method:</div>
+                            <div style="text-transform: uppercase; color: #334155;">{{ $payment?->payment_method ?? 'N/A' }}</div>
+                        </td>
+                        <td style="width: 50%; vertical-align: top; text-align: right;">
+                            <div style="font-weight: bold; margin-bottom: 4px;">Amount Paid:</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #166534; margin-bottom: 10px;">â‚¹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</div>
+                            
+                            <span class="payment-status-badge {{ $isPaid ? 'success' : 'pending' }}">
+                                {{ $payment?->status ?? 'pending' }}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        @endunless
 
         <!-- Declaration & Signatures -->
         <div class="section-title">Declaration</div>

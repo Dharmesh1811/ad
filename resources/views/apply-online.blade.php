@@ -179,30 +179,32 @@
                                     </div>
                                 </div>
 
-                                <!-- Payment details section inside Card -->
-                                <div class="mt-5 pt-4 border-top">
-                                    <h5 class="fw-bold text-dark mb-3"><i class="fas fa-credit-card text-success me-2"></i>Receipt & Payment Info</h5>
-                                    @php
-                                        $payment = auth()->user()->payments->firstWhere('exam_id', $exam->id);
-                                    @endphp
-                                    <div class="p-4 bg-light rounded-4 border shadow-xs">
-                                        <div class="row g-3 text-center text-sm-start">
-                                            <div class="col-sm-5">
-                                                <span class="text-muted small d-block mb-1 text-start">Transaction ID / Razorpay Payment ID</span>
-                                                <span class="fw-bold text-dark font-monospace d-block text-start">{{ $payment?->transaction_id ?? $payment?->razorpay_payment_id ?? 'N/A' }}</span>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <span class="text-muted small d-block mb-1 text-start">Amount Paid</span>
-                                                <span class="fw-bold text-success fs-5 d-block text-start">₹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</span>
-                                            </div>
-                                            <div class="col-sm-3 text-sm-end d-flex align-items-center justify-content-sm-end justify-content-center">
-                                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold text-uppercase">
-                                                    <i class="fas fa-check-circle me-1"></i> Paid
-                                                </span>
+                                @unless($exam->module_type === 'vacancy')
+                                    <!-- Payment details section inside Card -->
+                                    <div class="mt-5 pt-4 border-top">
+                                        <h5 class="fw-bold text-dark mb-3"><i class="fas fa-credit-card text-success me-2"></i>Receipt & Payment Info</h5>
+                                        @php
+                                            $payment = auth()->user()->payments->firstWhere('exam_id', $exam->id);
+                                        @endphp
+                                        <div class="p-4 bg-light rounded-4 border shadow-xs">
+                                            <div class="row g-3 text-center text-sm-start">
+                                                <div class="col-sm-5">
+                                                    <span class="text-muted small d-block mb-1 text-start">Transaction ID / Razorpay Payment ID</span>
+                                                    <span class="fw-bold text-dark font-monospace d-block text-start">{{ $payment?->transaction_id ?? $payment?->razorpay_payment_id ?? 'N/A' }}</span>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <span class="text-muted small d-block mb-1 text-start">Amount Paid</span>
+                                                    <span class="fw-bold text-success fs-5 d-block text-start">₹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</span>
+                                                </div>
+                                                <div class="col-sm-3 text-sm-end d-flex align-items-center justify-content-sm-end justify-content-center">
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-bold text-uppercase">
+                                                        <i class="fas fa-check-circle me-1"></i> Paid
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endunless
                             </div>
 
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
@@ -220,7 +222,9 @@
 
                             <div class="col-12">
                                 <h4 class="fw-bold text-primary mb-0">Candidate Details</h4>
-                                <p class="text-muted small mb-0">Complete the admin-configured form fields below and continue to payment.</p>
+                                <p class="text-muted small mb-0">
+                                    {{ $exam->module_type === 'vacancy' ? 'Complete the vacancy form fields below and submit directly.' : 'Complete the admin-configured form fields below and continue to payment.' }}
+                                </p>
                             </div>
 
                             @forelse ($fields as $field)
@@ -347,7 +351,9 @@
                                         <i class="fas fa-file-pdf me-2"></i> Download Form PDF
                                     </a>
                                 @else
-                                    <button type="submit" class="btn btn-primary px-5 py-3 rounded-pill fw-bold" {{ $fields->isEmpty() ? 'disabled' : '' }}>Save & Continue to Payment</button>
+                                    <button type="submit" class="btn btn-primary px-5 py-3 rounded-pill fw-bold" {{ $fields->isEmpty() ? 'disabled' : '' }}>
+                                        {{ $exam->module_type === 'vacancy' ? 'Submit Vacancy Form' : 'Save & Continue to Payment' }}
+                                    </button>
                                 @endif
                                 <a href="{{ route('dashboard') }}" class="btn btn-outline-dark px-4 py-3 rounded-pill">Back to Dashboard</a>
                             </div>

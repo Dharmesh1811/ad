@@ -19,6 +19,7 @@ class Exam extends Model
         'fee',
         'last_date',
         'status',
+        'module_type',
     ];
 
     protected $casts = [
@@ -44,5 +45,10 @@ class Exam extends Model
     public function isOpen(): bool
     {
         return $this->status === 'active' && now()->startOfDay()->lte($this->last_date);
+    }
+
+    public function isVacancy(): bool
+    {
+        return $this->module_type === 'vacancy';
     }
 }

@@ -147,9 +147,11 @@ class ApplicationController extends Controller
             $sigVal = is_array($sigVal) ? ($sigVal[0] ?? null) : $sigVal;
         }
 
+        $isVacancy = $exam->module_type === 'vacancy';
+
         $application->fill([
             'form_data' => $formData,
-            'status' => 'not_filled',
+            'status' => $isVacancy ? 'submitted' : 'not_filled',
             'full_name' => $nameField ? ($formData[$nameField->name] ?? null) : ($formData['full_name'] ?? null),
             'dob' => $dobField ? ($formData[$dobField->name] ?? null) : ($formData['dob'] ?? null),
             'gender' => $genderField ? ($formData[$genderField->name] ?? null) : ($formData['gender'] ?? null),
@@ -163,12 +165,16 @@ class ApplicationController extends Controller
         $application->exam()->associate($exam);
         $application->save();
 
-        $request->user()->payments()->updateOrCreate(
-            ['exam_id' => $exam->id],
-            ['amount' => $exam->fee ?? 500, 'status' => 'pending']
-        );
+        if (! $isVacancy) {
+            $request->user()->payments()->updateOrCreate(
+                ['exam_id' => $exam->id],
+                ['amount' => $exam->fee ?? 500, 'status' => 'pending']
+            );
 
-        return redirect()->route('payments.create', $application)->with('status', 'Form saved. Complete payment to submit the application.');
+            return redirect()->route('payments.create', $application)->with('status', 'Form saved. Complete payment to submit the application.');
+        }
+
+        return redirect()->route('dashboard')->with('status', 'Vacancy application submitted successfully.');
     }
 
     public function downloadPdf(Request $request, Application $application)

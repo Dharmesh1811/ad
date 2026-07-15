@@ -93,7 +93,7 @@
                                         </a>
                                     @endif
                                 @endif
-                                @if(($payment?->status ?? 'pending') !== 'paid' && ($payment?->payment_status ?? 'pending') !== 'paid')
+                                @if($application->exam?->module_type !== 'vacancy' && ($payment?->status ?? 'pending') !== 'paid' && ($payment?->payment_status ?? 'pending') !== 'paid')
                                     <a href="{{ route('payments.create', $application) }}" class="btn btn-dark rounded-pill px-4">
                                         <i class="fas fa-credit-card me-2"></i> Pay Fee
                                     </a>

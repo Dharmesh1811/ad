@@ -10,6 +10,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -64,7 +65,7 @@ class AdminController extends Controller
     {
         $search = $request->string('search')->trim()->toString();
 
-        $users = \App\Models\User::with(['applications.exam', 'payments.exam'])
+        $users = \App\Models\User::with(['applications.exam.formFields', 'payments.exam'])
             ->where('is_admin', false)
             ->when($search, function ($query, $search) {
                 $query->where(function ($inner) use ($search) {
@@ -78,9 +79,47 @@ class AdminController extends Controller
             ->paginate(15)
             ->withQueryString();
 
+        $formDataMap = [];
+        foreach ($users->getCollection() as $user) {
+            foreach ($user->applications as $app) {
+                $fields = ($app->exam?->formFields ?? collect())->map(function ($field) use ($app) {
+                    $value = data_get($app->form_data ?? [], $field->name);
+                    $files = [];
+
+                    if ($field->type === 'file' && $value) {
+                        $values = is_array($value) ? $value : [$value];
+                        $files = collect($values)->map(function ($filePath) {
+                            return [
+                                'path' => $filePath,
+                                'url' => \App\Models\Application::fileUrl($filePath),
+                            ];
+                        })->values()->all();
+                    }
+
+                    return [
+                        'label' => $field->label,
+                        'type' => $field->type,
+                        'value' => $value,
+                        'files' => $files,
+                    ];
+                })->values()->all();
+
+                $formDataMap[$app->id] = [
+                    'user_name' => $user->full_name,
+                    'form_title' => $app->exam?->title,
+                    'form_type' => $app->exam?->module_type === 'vacancy' ? 'Vacancy Form' : 'Exam Form',
+                    'submitted_at' => $app->submitted_at ? $app->submitted_at->format('d M Y, h:i A') : 'N/A',
+                    'status' => str_replace('_', ' ', ucfirst($app->status)),
+                    'fields' => $fields,
+                ];
+            }
+        }
+
+
         return view('admin.users', [
             'users' => $users,
             'search' => $search,
+            'formDataMap' => $formDataMap,
         ]);
     }
 
@@ -98,8 +137,20 @@ class AdminController extends Controller
     public function storeExam(Request $request): RedirectResponse
     {
         $validated = $request->validate($this->examValidationRules());
+        $validated['status'] = $validated['status'] ?? 'active';
+        $validated['module_type'] = $validated['module_type'] ?? 'exam';
 
-        $exam = Exam::create($validated);
+        $exam = DB::transaction(function () use ($validated) {
+            $exam = Exam::create($validated);
+
+            if ($exam->module_type === 'vacancy') {
+                foreach ($this->vacancyDefaultFields() as $field) {
+                    $exam->formFields()->create($field);
+                }
+            }
+
+            return $exam;
+        });
 
         return redirect()->route('admin.exams.builder', $exam)->with('status', 'Exam created successfully. Now you can add fields to your form.');
     }
@@ -107,6 +158,8 @@ class AdminController extends Controller
     public function updateExam(Request $request, Exam $exam): RedirectResponse
     {
         $validated = $request->validate($this->examValidationRules());
+        $validated['status'] = $validated['status'] ?? $exam->status;
+        $validated['module_type'] = $validated['module_type'] ?? $exam->module_type ?? 'exam';
 
         $exam->update($validated);
 

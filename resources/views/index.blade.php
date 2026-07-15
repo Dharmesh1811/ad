@@ -135,6 +135,69 @@
         </div>
     </section>
 
+    <section id="vacancies" class="py-5 bg-light">
+        <div class="container">
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-6">
+                    <h2 class="fw-bold text-dark display-6">Latest <span class="text-warning">Vacancies</span></h2>
+                    <p class="text-muted">Admin managed vacancy forms with direct submission and document upload.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="{{ route('vacancies.index') }}" class="btn btn-outline-primary rounded-pill px-4">View All Vacancies</a>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                @forelse ($vacancies as $vacancy)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="premium-card highlighted">
+                            <div class="p-card-header d-flex justify-content-between">
+                                <span class="status-indicator {{ now()->diffInDays($vacancy->last_date, false) <= 2 ? 'warning' : 'active' }}">
+                                    {{ now()->diffInDays($vacancy->last_date, false) <= 2 ? 'Closing Soon' : 'Open Now' }}
+                                </span>
+                                <div class="exam-type bg-warning text-dark">Vacancy</div>
+                            </div>
+
+                            <div class="p-card-body">
+                                <h3 class="exam-title">{{ $vacancy->title }}</h3>
+                                <p class="exam-desc">{{ $vacancy->description }}</p>
+
+                                <div class="exam-details-grid">
+                                    <div class="detail-item">
+                                        <span class="label">LAST DATE</span>
+                                        <span class="value {{ now()->diffInDays($vacancy->last_date, false) <= 2 ? 'text-danger' : 'text-primary' }}">
+                                            {{ $vacancy->last_date->format('d M, Y') }}
+                                        </span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="label">FIELDS</span>
+                                        <span class="value">{{ $vacancy->formFields->count() }} fields</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-card-footer">
+                                @auth
+                                    <a href="{{ route('application.create', $vacancy) }}" class="apply-link">
+                                        Apply Vacancy <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                @else
+                                    <a href="#" class="apply-link" data-bs-toggle="modal" data-bs-target="#loginPortal">
+                                        Apply Vacancy <i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                @endauth
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-light border rounded-4 text-center">No vacancy forms are available right now.</div>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-5">

@@ -66,6 +66,9 @@ class PaymentController extends Controller
         $exam = $application->exam;
 
         abort_if(is_null($exam), 404, 'Exam not found for this application.');
+        if ($exam->module_type === 'vacancy') {
+            return redirect()->route('dashboard')->with('status', 'Vacancy applications do not require payment.');
+        }
 
         // SECURITY: Amount comes from the DB, not from user input
         $amountInRupees = (float) ($exam->fee ?? 500);
@@ -169,6 +172,13 @@ class PaymentController extends Controller
             403,
             'Unauthorized payment verification attempt.'
         );
+
+        if ($application->exam?->module_type === 'vacancy') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vacancy applications do not require payment.',
+            ], 422);
+        }
 
         $payment = Payment::where('razorpay_order_id', $validated['razorpay_order_id'])
             ->where('user_id', $request->user()->id)
@@ -308,6 +318,10 @@ class PaymentController extends Controller
     {
         abort_unless($application->user_id === $request->user()->id, 403);
 
+        if ($application->exam?->module_type === 'vacancy') {
+            return redirect()->route('dashboard')->with('status', 'Vacancy applications do not require payment.');
+        }
+
         $payment = Payment::where('user_id', $request->user()->id)
             ->where('exam_id', $application->exam_id)
             ->where('payment_status', 'paid')
@@ -332,6 +346,10 @@ class PaymentController extends Controller
     public function failed(Request $request, Application $application): View
     {
         abort_unless($application->user_id === $request->user()->id, 403);
+
+        if ($application->exam?->module_type === 'vacancy') {
+            return redirect()->route('dashboard')->with('status', 'Vacancy applications do not require payment.');
+        }
 
         $payment = Payment::where('user_id', $request->user()->id)
             ->where('exam_id', $application->exam_id)

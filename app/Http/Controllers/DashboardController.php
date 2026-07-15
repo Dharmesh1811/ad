@@ -15,7 +15,9 @@ class DashboardController extends Controller
         $search = $request->query('search');
         $statusFilter = $request->query('status', 'active'); // Default to active
 
-        $query = Exam::query();
+        $query = Exam::query()->where(function ($builder) {
+            $builder->whereNull('module_type')->orWhere('module_type', 'exam');
+        });
 
         if ($search) {
             $query->where(function($q) use ($search) {

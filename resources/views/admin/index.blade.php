@@ -52,13 +52,21 @@
                         <p class="text-muted small mb-4">Fill in the basic details to create a new exam/form. You can add fields in the next step.</p>
                         <form method="POST" action="{{ route('admin.exams.store') }}" class="row g-3">
                             @csrf
+                            <input type="hidden" name="status" value="active">
+                            <div class="col-12">
+                                <label class="small text-muted">Form Type</label>
+                                <select name="module_type" class="form-select">
+                                    <option value="exam">Exam Form</option>
+                                    <option value="vacancy">Vacancy Form</option>
+                                </select>
+                            </div>
                             <div class="col-12">
                                 <label class="small text-muted">Form Title</label>
                                 <input type="text" name="title" class="form-control" placeholder="e.g. Admission 2024" required>
                             </div>
                             <div class="col-12">
-                                <label class="small text-muted">Description</label>
-                                <textarea name="description" class="form-control" rows="3" placeholder="Short description..." required></textarea>
+                                <label class="small text-muted">Notes</label>
+                                <textarea name="description" class="form-control" rows="3" placeholder="Short notes..." required></textarea>
                             </div>
                             <div class="col-md-6">
                                 <label class="small text-muted">Category</label>
@@ -97,6 +105,7 @@
                                         <th>Title</th>
                                         <th>Last Date</th>
                                         <th>Fields</th>
+                                        <th>Type</th>
                                         <th>Status</th>
                                         <th class="text-end">Actions</th>
                                     </tr>
@@ -111,6 +120,11 @@
                                             <td>{{ $exam->last_date->format('d M, Y') }}</td>
                                             <td>
                                                 <span class="badge bg-light text-primary border">{{ $exam->formFields->count() }} fields</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge {{ $exam->module_type === 'vacancy' ? 'bg-warning-subtle text-warning border border-warning-subtle' : 'bg-info-subtle text-info border border-info-subtle' }} px-3">
+                                                    {{ ucfirst($exam->module_type ?? 'exam') }}
+                                                </span>
                                             </td>
                                             <td>
                                                 @if($exam->status === 'active')
@@ -143,7 +157,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center py-4 text-muted">No forms created yet.</td>
+                                            <td colspan="6" class="text-center py-4 text-muted">No forms created yet.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

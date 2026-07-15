@@ -21,7 +21,29 @@ trait BuildsDynamicForms
             'detail_value' => ['nullable', 'string', 'max:100'],
             'fee' => ['required', 'numeric', 'min:0'],
             'last_date' => ['required', 'date'],
-            'status' => ['required', Rule::in(['active', 'inactive'])],
+            'status' => ['nullable', Rule::in(['active', 'inactive'])],
+            'module_type' => ['nullable', Rule::in(['exam', 'vacancy'])],
+        ];
+    }
+
+    protected function vacancyDefaultFields(): array
+    {
+        return [
+            ['label' => 'Name', 'name' => 'name', 'type' => 'text', 'is_required' => true, 'sort_order' => 1],
+            ['label' => 'Age', 'name' => 'age', 'type' => 'number', 'is_required' => true, 'sort_order' => 2],
+            ['label' => 'Sex', 'name' => 'sex', 'type' => 'select', 'options' => ['Male', 'Female', 'Other'], 'is_required' => true, 'sort_order' => 3],
+            ['label' => 'Address', 'name' => 'address', 'type' => 'textarea', 'is_required' => true, 'sort_order' => 4],
+            ['label' => 'Marriage Status', 'name' => 'marriage_status', 'type' => 'select', 'options' => ['Single', 'Married', 'Divorced', 'Widowed'], 'is_required' => true, 'sort_order' => 5],
+            ['label' => 'Education Details', 'name' => 'education_details', 'type' => 'textarea', 'is_required' => true, 'sort_order' => 6],
+            ['label' => '10th/Board Year', 'name' => 'tenth_board_year', 'type' => 'text', 'is_required' => false, 'sort_order' => 7],
+            ['label' => '12th Board Year', 'name' => 'twelfth_board_year', 'type' => 'text', 'is_required' => false, 'sort_order' => 8],
+            ['label' => 'Graduation/Post Graduation/PhD - Course/Year/University', 'name' => 'higher_education_details', 'type' => 'textarea', 'is_required' => false, 'sort_order' => 9],
+            ['label' => 'Previous Job Details If Any', 'name' => 'previous_job_details', 'type' => 'textarea', 'is_required' => false, 'sort_order' => 10],
+            ['label' => 'Experience If Any', 'name' => 'experience', 'type' => 'textarea', 'is_required' => false, 'sort_order' => 11],
+            ['label' => 'Photo', 'name' => 'photo', 'type' => 'file', 'is_required' => true, 'sort_order' => 12],
+            ['label' => 'Signature', 'name' => 'signature', 'type' => 'file', 'is_required' => true, 'sort_order' => 13],
+            ['label' => 'Adhar Card', 'name' => 'adhar_card', 'type' => 'file', 'is_required' => true, 'sort_order' => 14],
+            ['label' => 'Pan Card', 'name' => 'pan_card', 'type' => 'file', 'is_required' => true, 'sort_order' => 15],
         ];
     }
 
