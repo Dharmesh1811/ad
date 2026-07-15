@@ -198,6 +198,70 @@
         </div>
     </section>
 
+    <section id="syllabus-section" class="py-5 bg-white">
+        <div class="container">
+            <div class="row mb-5 align-items-center">
+                <div class="col-md-6">
+                    <h2 class="fw-bold text-dark display-6">Subject <span class="text-primary">Syllabus</span></h2>
+                    <p class="text-muted">Download the official syllabus and notes for your preparation.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group rounded-pill border overflow-hidden shadow-sm ms-auto" style="max-width: 400px;">
+                        <span class="input-group-text bg-white border-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" id="syllabus-search" class="form-control border-0 px-2" placeholder="Search syllabus by subject...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4" id="syllabus-cards-container">
+                @forelse ($syllabi as $syllabus)
+                    <div class="col-lg-4 col-md-6 syllabus-card-item" data-subject="{{ strtolower($syllabus->subject_name) }}">
+                        <div class="premium-card h-100 d-flex flex-column" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                    <i class="fas fa-book-open me-1"></i> Subject
+                                </span>
+                                <span class="small text-muted">{{ $syllabus->created_at->format('d M, Y') }}</span>
+                            </div>
+
+                            <div class="flex-grow-1 mb-4">
+                                <h4 class="fw-bold text-dark mb-2">{{ $syllabus->subject_name }}</h4>
+                                @if($syllabus->notes)
+                                    <p class="text-muted small mb-0" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; line-height: 1.6;">{{ $syllabus->notes }}</p>
+                                @else
+                                    <p class="text-muted small mb-0" style="line-height: 1.6;">No additional notes provided. Click the link below to download the syllabus file.</p>
+                                @endif
+                            </div>
+
+                            <div class="pt-3 border-top mt-auto">
+                                <a href="{{ $syllabus->file_url }}" target="_blank" class="btn btn-primary w-100 rounded-pill py-2 text-white d-flex align-items-center justify-content-center gap-2">
+                                    <i class="fas fa-file-pdf"></i> Download Syllabus
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="col-12" id="no-syllabus-alert">
+                        <div class="alert alert-light border rounded-4 text-center">No syllabus has been uploaded yet. Please check back later.</div>
+                    </div>
+                @endforelse
+
+                <div class="col-12 d-none text-center py-5 text-muted" id="no-syllabus-search-results">
+                    <i class="fas fa-search-minus display-4 mb-3 d-block text-muted opacity-50"></i>
+                    No matching subjects found.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .syllabus-card-item .premium-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 82, 155, 0.08) !important;
+            border-color: rgba(0, 82, 155, 0.15) !important;
+        }
+    </style>
+
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center mb-5">
@@ -346,5 +410,45 @@
             </div>
         </div>
     </section>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('syllabus-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', function (e) {
+                const query = e.target.value.toLowerCase().trim();
+                const cards = document.querySelectorAll('.syllabus-card-item');
+                let foundAny = false;
+
+                cards.forEach(card => {
+                    const subject = card.getAttribute('data-subject') || '';
+                    if (subject.includes(query)) {
+                        card.classList.remove('d-none');
+                        foundAny = true;
+                    } else {
+                        card.classList.add('d-none');
+                    }
+                });
+
+                const noResultsAlert = document.getElementById('no-syllabus-search-results');
+                const noSyllabusAlert = document.getElementById('no-syllabus-alert');
+
+                if (noResultsAlert) {
+                    if (query && !foundAny) {
+                        noResultsAlert.classList.remove('d-none');
+                        if (noSyllabusAlert) noSyllabusAlert.classList.add('d-none');
+                    } else {
+                        noResultsAlert.classList.add('d-none');
+                        if (!query && noSyllabusAlert && cards.length === 0) {
+                            noSyllabusAlert.classList.remove('d-none');
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+@endpush
 
 @endsection

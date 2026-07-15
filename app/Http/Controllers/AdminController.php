@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\Exam;
 use App\Models\FormField;
+use App\Models\Syllabus;
 use App\Http\Controllers\Concerns\BuildsDynamicForms;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Response;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
@@ -50,6 +52,7 @@ class AdminController extends Controller
             'totalExams' => Exam::count(),
             'totalUsers' => \App\Models\User::where('is_admin', false)->count(),
             'totalApplications' => Application::count(),
+            'syllabi' => Syllabus::latest()->get(),
         ]);
     }
 
@@ -257,5 +260,36 @@ class AdminController extends Controller
         };
 
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function storeSyllabus(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'subject_name' => ['required', 'string', 'max:255'],
+            'file' => ['required', 'file', 'mimes:pdf,jpeg,png,jpg,webp', 'max:10240'],
+            'notes' => ['nullable', 'string'],
+        ]);
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = 'uploads/syllabus/' . Str::random(40) . '.' . $file->getClientOriginalExtension();
+            Storage::disk('public')->putFileAs('uploads/syllabus', $file, basename($filename));
+            $validated['file_path'] = $filename;
+        }
+
+        Syllabus::create($validated);
+
+        return back()->with('status', 'Syllabus added successfully.');
+    }
+
+    public function destroySyllabus(Syllabus $syllabus): RedirectResponse
+    {
+        if ($syllabus->file_path && Storage::disk('public')->exists($syllabus->file_path)) {
+            Storage::disk('public')->delete($syllabus->file_path);
+        }
+
+        $syllabus->delete();
+
+        return back()->with('status', 'Syllabus deleted successfully.');
     }
 }

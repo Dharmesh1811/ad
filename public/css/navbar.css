@@ -38,14 +38,14 @@ body {
 .brd-text {
     color: var(--brd-blue);
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     letter-spacing: -0.5px;
 }
 
 .edu-text {
     color: var(--brd-orange);
     font-weight: 800;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .pvt-ltd {
@@ -57,8 +57,8 @@ body {
 }
 
 .logo-img {
-    height: 80px;
-    width: 80px;
+    height: 65px;
+    width: 65px;
     object-fit: contain;
 }
 
@@ -66,16 +66,17 @@ body {
 .nav-link {
     color: #333 !important;
     font-weight: 600;
-    font-size: 0.95rem;
-    padding: 10px 18px !important;
+    font-size: 0.82rem;
+    padding: 8px 11px !important;
     position: relative;
     transition: var(--transition-speed);
+    white-space: nowrap;
 }
 
 .nav-link i {
     color: var(--brd-blue); /* Icons style */
-    margin-right: 5px;
-    font-size: 1rem;
+    margin-right: 4px;
+    font-size: 0.88rem;
 }
 
 .nav-link::after {
@@ -104,9 +105,10 @@ body {
     background: linear-gradient(45deg, var(--brd-blue), var(--brd-orange));
     border: none;
     color: white !important;
-    padding: 10px 25px;
-    border-radius: 12px;
+    padding: 8px 18px;
+    border-radius: 10px;
     font-weight: 700;
+    font-size: 0.82rem;
     letter-spacing: 0.5px;
     position: relative;
     overflow: hidden;
@@ -197,8 +199,18 @@ body {
         display: none; /* Hide underline on mobile for cleaner look */
     }
     
+    .nav-link {
+        font-size: 0.9rem !important;
+        padding: 10px 14px !important;
+    }
+
     .brd-text, .edu-text {
-        font-size: 1.2rem; /* Slightly smaller for mobile */
+        font-size: 1.1rem; /* Slightly smaller for mobile */
+    }
+
+    .logo-img {
+        height: 50px;
+        width: 50px;
     }
 }
 

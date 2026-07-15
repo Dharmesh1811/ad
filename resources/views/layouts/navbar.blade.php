@@ -44,6 +44,7 @@
                 <li class="nav-item"><a class="nav-link {{ Request::is('track-status') ? 'active' : '' }}" href="{{ url('/track-status') }}"><i
                             class="fas fa-map-marker-alt me-1"></i> Track Status</a></li>
                 <li class="nav-item"><a class="nav-link {{ Request::is('vacancies*') ? 'active' : '' }}" href="{{ route('vacancies.index') }}"><i class="fas fa-briefcase me-1"></i> Vacancy</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/#syllabus-section') }}"><i class="fas fa-book-open me-1"></i> Syllabus</a></li>
                 <li class="nav-item"><a class="nav-link {{ Request::is('download-id-card') ? 'active' : '' }}" href="{{ route('id-card.form') }}"><i class="fas fa-id-card me-1"></i>
                         Admit Card</a></li>
                 @auth

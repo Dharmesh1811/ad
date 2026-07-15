@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Exam;
+use App\Models\Syllabus;
 use Illuminate\Contracts\View\View;
 
 class HomeController extends Controller
@@ -20,6 +21,7 @@ class HomeController extends Controller
                 ->where('module_type', 'vacancy')
                 ->orderBy('last_date')
                 ->get(),
+            'syllabi' => Syllabus::latest()->get(),
         ]);
     }
 }

@@ -76,4 +76,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/exams/{exam}/builder', [AdminController::class, 'builder'])->name('exams.builder');
     Route::delete('/exams/{exam}', [AdminController::class, 'destroyExam'])->name('exams.destroy');
     Route::get('/export', [AdminController::class, 'export'])->name('export');
+    Route::post('/syllabus', [AdminController::class, 'storeSyllabus'])->name('syllabus.store');
+    Route::delete('/syllabus/{syllabus}', [AdminController::class, 'destroySyllabus'])->name('syllabus.destroy');
 });
