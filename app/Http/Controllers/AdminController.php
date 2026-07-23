@@ -113,6 +113,7 @@ class AdminController extends Controller
                     'form_type' => $app->exam?->module_type === 'vacancy' ? 'Vacancy Form' : 'Exam Form',
                     'submitted_at' => $app->submitted_at ? $app->submitted_at->format('d M Y, h:i A') : 'N/A',
                     'status' => str_replace('_', ' ', ucfirst($app->status)),
+                    'can_download_pdf' => $this->canDownloadApplicationPdf($app),
                     'fields' => $fields,
                 ];
             }
@@ -135,6 +136,42 @@ class AdminController extends Controller
         $application->update($validated);
 
         return back()->with('status', 'Application status updated.');
+    }
+
+    public function downloadApplicationPdf(Application $application)
+    {
+        $application->loadMissing(['exam.formFields', 'user.payments']);
+
+        abort_unless($this->canDownloadApplicationPdf($application), 403, 'PDF download is available only for approved and paid applications.');
+
+        $payment = $application->user->payments->firstWhere('exam_id', $application->exam_id);
+        $fields = $application->exam->formFields;
+
+        $photoField = $fields->first(fn ($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'photo') || str_contains(Str::lower($f->label), 'photo')));
+        $sigField = $fields->first(fn ($f) => $f->type === 'file' && (str_contains(Str::lower($f->name), 'signature') || str_contains(Str::lower($f->label), 'signature')));
+
+        $photoVal = $application->photo ?? ($photoField ? data_get($application->form_data, $photoField->name) : null);
+        if (is_array($photoVal)) {
+            $photoVal = $photoVal[0] ?? null;
+        }
+
+        $sigVal = $application->signature ?? ($sigField ? data_get($application->form_data, $sigField->name) : null);
+        if (is_array($sigVal)) {
+            $sigVal = $sigVal[0] ?? null;
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdfs.application', [
+            'application' => $application,
+            'exam' => $application->exam,
+            'fields' => $fields,
+            'payment' => $payment,
+            'photoVal' => $photoVal,
+            'sigVal' => $sigVal,
+        ]);
+
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('Application_' . $application->user->application_number . '_' . Str::slug($application->exam->title) . '.pdf');
     }
 
     public function storeExam(Request $request): RedirectResponse
@@ -291,5 +328,16 @@ class AdminController extends Controller
         $syllabus->delete();
 
         return back()->with('status', 'Syllabus deleted successfully.');
+    }
+
+    private function canDownloadApplicationPdf(Application $application): bool
+    {
+        $payment = $application->user?->payments?->firstWhere('exam_id', $application->exam_id);
+
+        return $application->status === 'approved'
+            && (
+                ($payment?->status === 'paid')
+                || ($payment?->payment_status === 'paid')
+            );
     }
 }

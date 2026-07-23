@@ -110,6 +110,25 @@
                                                 >
                                                     <i class="fas fa-eye me-1"></i> View Full Form Details
                                                 </button>
+
+                                                @if(($details['can_download_pdf'] ?? false))
+                                                    <a
+                                                        href="{{ route('admin.applications.pdf', $app) }}"
+                                                        class="btn btn-danger btn-sm w-100 mt-2"
+                                                        style="font-size: 10px;"
+                                                    >
+                                                        <i class="fas fa-file-pdf me-1"></i> Download Application PDF
+                                                    </a>
+                                                @else
+                                                    <button
+                                                        type="button"
+                                                        class="btn btn-outline-secondary btn-sm w-100 mt-2"
+                                                        style="font-size: 10px;"
+                                                        disabled
+                                                    >
+                                                        <i class="fas fa-lock me-1"></i> PDF Available After Approval & Payment
+                                                    </button>
+                                                @endif
                                             </div>
                                         @empty
                                             <span class="text-muted small italic">No exams applied</span>

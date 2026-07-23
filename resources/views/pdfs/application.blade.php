@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -179,6 +179,36 @@
 </head>
 <body>
     <div class="container">
+        @php
+        // Inline base64 image helper for DomPDF (cannot load remote URLs).
+        // function_exists() guard prevents fatal error if view is rendered multiple times.
+        if (!function_exists('pdfImageBase64')) {
+            function pdfImageBase64(?string $path): ?string {
+                if (!$path) return null;
+
+                // Try storage/public path first
+                $storagePath = storage_path('app/public/' . ltrim($path, '/'));
+                if (file_exists($storagePath)) {
+                    $mime = mime_content_type($storagePath);
+                    $data = base64_encode(file_get_contents($storagePath));
+                    return 'data:' . $mime . ';base64,' . $data;
+                }
+
+                // Try public path
+                $publicPath = public_path(ltrim($path, '/'));
+                if (file_exists($publicPath)) {
+                    $mime = mime_content_type($publicPath);
+                    $data = base64_encode(file_get_contents($publicPath));
+                    return 'data:' . $mime . ';base64,' . $data;
+                }
+
+                return null;
+            }
+        }
+
+        $photoBase64 = pdfImageBase64($photoVal);
+        $sigBase64   = pdfImageBase64($sigVal);
+        @endphp
         <!-- Main Header -->
         <table class="header-table">
             <tr>
@@ -227,8 +257,8 @@
                 </td>
                 <td class="photo-col">
                     <div class="photo-box">
-                        @if($photoVal)
-                            <img src="{{ \App\Models\Application::fileUrl($photoVal) }}" alt="Photo">
+                        @if($photoBase64)
+                            <img src="{{ $photoBase64 }}" alt="Photo">
                         @else
                             <div class="photo-placeholder">PASTE<br>PHOTO HERE</div>
                         @endif
@@ -296,7 +326,7 @@
                         </td>
                         <td style="width: 50%; vertical-align: top; text-align: right;">
                             <div style="font-weight: bold; margin-bottom: 4px;">Amount Paid:</div>
-                            <div style="font-size: 16px; font-weight: bold; color: #166534; margin-bottom: 10px;">â‚¹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #166534; margin-bottom: 10px;">₹{{ number_format($payment?->amount ?? $exam->fee ?? 500, 2) }}</div>
                             
                             <span class="payment-status-badge {{ $isPaid ? 'success' : 'pending' }}">
                                 {{ $payment?->status ?? 'pending' }}
@@ -324,8 +354,8 @@
                         <tr>
                             <td>
                                 <div class="signature-img-box">
-                                    @if($sigVal)
-                                        <img src="{{ \App\Models\Application::fileUrl($sigVal) }}" alt="Signature">
+                                    @if($sigBase64)
+                                        <img src="{{ $sigBase64 }}" alt="Signature">
                                     @endif
                                 </div>
                                 <div class="signature-label">Candidate's Signature</div>

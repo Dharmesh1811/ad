@@ -67,6 +67,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/', [AdminController::class, 'index'])->name('index');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::patch('/applications/{application}', [AdminController::class, 'update'])->name('applications.update');
+    Route::get('/applications/{application}/pdf', [AdminController::class, 'downloadApplicationPdf'])->name('applications.pdf');
     Route::post('/exams', [AdminController::class, 'storeExam'])->name('exams.store');
     Route::patch('/exams/{exam}', [AdminController::class, 'updateExam'])->name('exams.update');
     Route::post('/exams/{exam}/fields', [AdminController::class, 'storeField'])->name('fields.store');
